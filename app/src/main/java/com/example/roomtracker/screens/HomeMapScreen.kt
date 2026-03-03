@@ -31,6 +31,7 @@ import com.google.maps.android.compose.*
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
@@ -47,7 +48,7 @@ fun HomeMapScreen(navController: NavController) {
     var isRouting by remember { mutableStateOf(false) }
     var routeDestination by remember { mutableStateOf<LatLng?>(null) }
     var simulatedUserLocation by remember { mutableStateOf<LatLng?>(null) }
-    var selectedPoi by remember { mutableStateOf<String?>(null) }
+    var selectedPoi by remember { mutableStateOf<Pair<String, LatLng>?>(null) }
     var showShareDialog by remember { mutableStateOf(false) }
     var showPaths by remember { mutableStateOf(false) }
     var showPois by remember { mutableStateOf(true) }
@@ -171,7 +172,7 @@ fun HomeMapScreen(navController: NavController) {
                             state = MarkerState(position = location),
                             title = name,
                             onClick = {
-                                selectedPoi = name
+                                selectedPoi = name to location
                                 true
                             }
                         )
@@ -303,6 +304,8 @@ fun HomeMapScreen(navController: NavController) {
                         }
                     }
                     SmallFab(Icons.Default.Share) {
+
+                        showMenu = false
                         showShareDialog = true
                     }
                     SmallFab(
@@ -337,7 +340,9 @@ fun HomeMapScreen(navController: NavController) {
         }
     }
     if (showShareDialog) {
+
         ShareLocationDialog(
+            destination = routeDestination,
             onDismiss = { showShareDialog = false }
         )
     }
@@ -347,10 +352,33 @@ fun HomeMapScreen(navController: NavController) {
             onDismissRequest = { showSheet = false },
             sheetState = sheetState
         ) {
-            BottomSheetContent(onPlaceClick = { name ->
-                selectedPoi = name
-            }
+            BottomSheetContent(
+                pois = campusData.pois,
+                onPlaceClick = { name ->
+
+                    val poi = campusData.pois.firstOrNull { it.first == name }
+
+                    if (poi != null) {
+                        selectedPoi = poi
+                    }
+                },
+                onRouteClick = { poi ->
+
+                    campusBounds?.let { bounds ->
+
+                        simulatedUserLocation = generateRandomLocation(bounds)
+
+                        routeDestination = poi.second
+                        routingDestinationName = poi.first
+                        isRouting = true
+                        showSheet = false
+                    }
+                }
             )
+
+
+
+
         }
     }
     if (selectedPoi != null) {
@@ -358,22 +386,18 @@ fun HomeMapScreen(navController: NavController) {
             onDismissRequest = { selectedPoi = null }
         ) {
             BuildingDetailSheet(
-                buildingName = selectedPoi!!,
+                buildingName = selectedPoi!!.first,
                 onClose = { selectedPoi = null },
-                onStartRoute = { buildingName ->
+                onStartRoute = {
 
                     campusBounds?.let { bounds ->
+
                         simulatedUserLocation = generateRandomLocation(bounds)
 
-                        val destination = campusData.pois
-                            .firstOrNull { it.first == buildingName }
-
-                        routeDestination = destination?.second
-
-                        routingDestinationName = buildingName  // 🔥 ESTA ES LA CLAVE
-
+                        routeDestination = selectedPoi!!.second
+                        routingDestinationName = selectedPoi!!.first
                         isRouting = true
-                        selectedPoi = null  // ahora sí puedes cerrarlo
+                        selectedPoi = null
                     }
                 }
             )
@@ -382,7 +406,9 @@ fun HomeMapScreen(navController: NavController) {
 }
 @Composable
 fun BottomSheetContent(
-    onPlaceClick: (String) -> Unit
+    pois: List<Pair<String, LatLng>>,
+    onPlaceClick: (String) -> Unit,
+    onRouteClick: (Pair<String, LatLng>) -> Unit
 ) {
 
     Column(
@@ -408,24 +434,33 @@ fun BottomSheetContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        repeat(3) {
+        pois.forEach { poi ->
+
             PlaceItemCard(
+                title = poi.first,
+                onCardClick = {
+                    onRouteClick(poi)
+                },
                 onInfoClick = {
-                    onPlaceClick("Edificio Gerardo Arango")
+                    onPlaceClick(poi.first)
                 }
             )
         }
     }
 }
+
 @Composable
 fun PlaceItemCard(
+    title: String,
+    onCardClick: () -> Unit,
     onInfoClick: () -> Unit
-) {
+){
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 12.dp),
+            .padding(bottom = 12.dp)
+            .clickable { onCardClick() },
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
@@ -460,7 +495,7 @@ fun PlaceItemCard(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = "Edificio Gerardo Arango",
+                    text = title,
                     style = MaterialTheme.typography.titleMedium
                 )
 
@@ -508,80 +543,65 @@ fun SmallFab(
 }
 @Composable
 fun ShareLocationDialog(
+    destination: LatLng?,
     onDismiss: () -> Unit
 ) {
+
+    val context = LocalContext.current
+    val clipboard = androidx.compose.ui.platform.LocalClipboardManager.current
+
+    val shareUrl = if (destination != null) {
+        "https://roomtracker.app/share?lat=${destination.latitude}&lng=${destination.longitude}"
+    } else {
+        "https://roomtracker.app/share?location=campus_javeriana_main"
+    }
     Dialog(onDismissRequest = onDismiss) {
 
         Card(
             shape = RoundedCornerShape(28.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(600.dp)
+                .padding(20.dp)
         ) {
 
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(20.dp)
+                    .padding(24.dp)
             ) {
 
-                // 🔝 Header
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Edificio Gerardo Arango",
-                        style = MaterialTheme.typography.titleLarge
-                    )
+                Text(
+                    "Compartir Ubicación",
+                    style = MaterialTheme.typography.titleLarge
+                )
 
-                    IconButton(onClick = onDismiss) {
-                        Icon(Icons.Default.Close, contentDescription = null)
-                    }
-                }
+                Spacer(modifier = Modifier.height(16.dp))
 
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // 🔽 Scrollable Content
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState())
-                ) {
-
-                    FloorSection(
-                        floorTitle = "Piso 1",
-                        description = "Salones 101 - 110. Servicios: Baños, Cafetería, Oficina Administrativa."
-                    )
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    FloorSection(
-                        floorTitle = "Piso 2",
-                        description = "Salones 201 - 215. Servicios: Baños, Sala de estudio."
-                    )
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    FloorSection(
-                        floorTitle = "Piso 3",
-                        description = "Laboratorios de Ingeniería. Servicios: Baños, Laboratorio de redes."
-                    )
-                }
+                OutlinedTextField(
+                    value = shareUrl,
+                    onValueChange = {},
+                    readOnly = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
-                    onClick = { /* futuro compartir */ },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(55.dp),
-                    shape = RoundedCornerShape(24.dp)
+                    onClick = {
+                        clipboard.setText(androidx.compose.ui.text.AnnotatedString(shareUrl))
+                    },
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Icon(Icons.Default.Share, contentDescription = null)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Compartir Ubicación")
+                    Text("Copiar URL")
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = onDismiss,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) {
+                    Text("Cerrar")
                 }
             }
         }
@@ -628,7 +648,7 @@ fun FloorSection(
 fun BuildingDetailSheet(
     buildingName: String,
     onClose: () -> Unit,
-    onStartRoute: (String) -> Unit
+    onStartRoute: () -> Unit
 ){
 
     Column(
@@ -708,7 +728,7 @@ fun BuildingDetailSheet(
         Spacer(modifier = Modifier.height(30.dp))
 
         Button(
-            onClick = { onStartRoute(buildingName) },
+            onClick = { onStartRoute() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(55.dp),
