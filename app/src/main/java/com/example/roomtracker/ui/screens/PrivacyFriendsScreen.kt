@@ -1,4 +1,4 @@
-package com.example.roomtracker.screens
+package com.example.roomtracker.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,6 +22,9 @@ import com.example.roomtracker.ui.theme.DarkText
 import com.example.roomtracker.ui.theme.LightText
 import com.example.roomtracker.ui.theme.PrimaryOrange
 import androidx.compose.runtime.*
+import com.example.roomtracker.ui.components.common.ScreenHeader
+import com.example.roomtracker.ui.components.common.SearchField
+
 data class FriendAccess(
     val name: String,
     val role: String,
@@ -41,7 +44,7 @@ fun PrivacyFriendsScreen(
             )
         )
     }
-
+    var search by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,29 +55,17 @@ fun PrivacyFriendsScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         // HEADER
-        Row(verticalAlignment = Alignment.CenterVertically) {
-
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = null)
-            }
-
-            Text(
-                text = "Privacidad y Amigos",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = DarkText
-            )
-        }
+        ScreenHeader(
+            title = "Privacidad y Amigos",
+            onBack = onBack
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            placeholder = { Text("Buscar amigos...") },
-            leadingIcon = { Icon(Icons.Default.Search, null) },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(20.dp)
+        SearchField(
+            value = search,
+            onValueChange = { search = it },
+            placeholder = "Buscar amigos..."
         )
 
         Spacer(modifier = Modifier.height(20.dp))

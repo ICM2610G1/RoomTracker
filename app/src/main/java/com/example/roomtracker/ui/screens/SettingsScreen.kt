@@ -1,4 +1,4 @@
-package com.example.roomtracker.screens
+package com.example.roomtracker.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.roomtracker.ui.components.common.ScreenHeader
 import com.example.roomtracker.ui.theme.BackgroundGray
 import com.example.roomtracker.ui.theme.DarkText
 import com.example.roomtracker.ui.theme.LightText
@@ -33,25 +34,10 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         // Header
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = null
-                )
-            }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Text(
-                text = "Ajustes",
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = DarkText
-            )
-        }
+        ScreenHeader(
+            title = "Ajustes",
+            onBack = onBack
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 

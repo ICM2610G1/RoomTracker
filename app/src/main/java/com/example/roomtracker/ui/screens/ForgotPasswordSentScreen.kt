@@ -1,4 +1,4 @@
-package com.example.roomtracker.screens
+package com.example.roomtracker.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

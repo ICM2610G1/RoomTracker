@@ -5,7 +5,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000001",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -21,7 +21,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000002",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -37,7 +37,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000003",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -55,7 +55,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000004",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -73,7 +73,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000005",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -91,7 +91,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000006",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -109,7 +109,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000007",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -127,7 +127,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000008",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -145,7 +145,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000009",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -163,7 +163,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000010",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -179,7 +179,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000011",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -197,7 +197,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000012",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -213,7 +213,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000013",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -231,7 +231,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000014",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -249,7 +249,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000015",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -265,7 +265,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000016",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -281,7 +281,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000017",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -299,7 +299,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000018",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -315,7 +315,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000019",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -333,7 +333,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000020",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -351,7 +351,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000021",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -369,7 +369,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000022",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -387,7 +387,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000023",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -403,7 +403,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000024",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -419,7 +419,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000025",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -435,7 +435,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000026",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -451,7 +451,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000027",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -469,7 +469,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000028",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -487,7 +487,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000029",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -505,7 +505,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000030",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -523,7 +523,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000031",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -541,7 +541,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000032",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -559,7 +559,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000033",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -577,7 +577,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000034",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -593,7 +593,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000035",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -611,7 +611,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000036",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -629,7 +629,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000037",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -647,7 +647,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000038",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -665,7 +665,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000039",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -681,7 +681,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000040",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -697,7 +697,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000041",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -713,7 +713,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000042",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -729,7 +729,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000043",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -745,7 +745,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000044",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -761,7 +761,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000045",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -779,7 +779,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000046",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -795,7 +795,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000047",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -811,7 +811,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000048",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -829,7 +829,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000049",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -847,7 +847,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000050",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -865,7 +865,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000051",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -881,7 +881,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000052",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -897,7 +897,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000053",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -915,7 +915,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000054",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -931,7 +931,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000055",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -947,7 +947,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000056",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -963,7 +963,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000057",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -979,7 +979,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000058",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -995,7 +995,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000059",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1011,7 +1011,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000060",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1027,7 +1027,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000061",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1043,7 +1043,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000062",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -1061,7 +1061,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000063",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1077,7 +1077,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000064",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1093,7 +1093,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000065",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1109,7 +1109,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000066",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -1127,7 +1127,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000067",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -1145,7 +1145,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000068",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1161,7 +1161,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000069",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -1179,7 +1179,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000070",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1195,7 +1195,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000071",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1211,7 +1211,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000072",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1227,7 +1227,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000073",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1243,7 +1243,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000074",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1259,7 +1259,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000075",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1275,7 +1275,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000076",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -1293,7 +1293,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000077",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -1311,7 +1311,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000078",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -1329,7 +1329,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000079",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1345,7 +1345,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000080",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -1363,7 +1363,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000081",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1379,7 +1379,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000082",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1395,7 +1395,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000083",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1411,7 +1411,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000084",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1427,7 +1427,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000085",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -1445,7 +1445,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000086",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1461,7 +1461,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000087",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1477,7 +1477,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000088",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1493,7 +1493,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000089",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1509,7 +1509,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000090",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1525,7 +1525,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000091",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1541,7 +1541,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000092",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1557,7 +1557,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000093",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1573,7 +1573,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000094",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1589,7 +1589,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000095",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1605,7 +1605,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000096",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1621,7 +1621,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000097",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1637,7 +1637,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000098",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -1655,7 +1655,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000099",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1671,7 +1671,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000100",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1687,7 +1687,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000101",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1703,7 +1703,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000102",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1719,7 +1719,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000103",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -1737,7 +1737,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000104",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1753,7 +1753,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000105",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1769,7 +1769,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000106",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1785,7 +1785,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000107",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1801,7 +1801,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000108",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1817,7 +1817,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000109",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1833,7 +1833,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000110",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1849,7 +1849,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000111",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1865,7 +1865,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000112",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1881,7 +1881,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000113",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1897,7 +1897,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000114",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -1915,7 +1915,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000115",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1931,7 +1931,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000116",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1947,7 +1947,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000117",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1963,7 +1963,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000118",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -1981,7 +1981,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000119",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -1997,7 +1997,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000120",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2015,7 +2015,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000121",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2031,7 +2031,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000122",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2047,7 +2047,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000123",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2065,7 +2065,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000124",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2083,7 +2083,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000125",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2099,7 +2099,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000126",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2117,7 +2117,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000127",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2133,7 +2133,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000128",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2149,7 +2149,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000129",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2165,7 +2165,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000130",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2181,7 +2181,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000131",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2197,7 +2197,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000132",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2213,7 +2213,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000133",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2231,7 +2231,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000134",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2247,7 +2247,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000135",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2263,7 +2263,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000136",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2279,7 +2279,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000137",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2297,7 +2297,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000138",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2313,7 +2313,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000139",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2331,7 +2331,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000140",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2349,7 +2349,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000141",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2365,7 +2365,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000142",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2381,7 +2381,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000143",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2397,7 +2397,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000144",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2415,7 +2415,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000145",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2431,7 +2431,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000146",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2447,7 +2447,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000147",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2465,7 +2465,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000148",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2481,7 +2481,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000149",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2499,7 +2499,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000150",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2517,7 +2517,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000151",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2533,7 +2533,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000152",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2549,7 +2549,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000153",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2565,7 +2565,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000154",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2581,7 +2581,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000155",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2597,7 +2597,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000156",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2613,7 +2613,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000157",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2629,7 +2629,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000158",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2645,7 +2645,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000159",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2663,7 +2663,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000160",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2679,7 +2679,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000161",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2695,7 +2695,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000162",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2713,7 +2713,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000163",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2731,7 +2731,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000164",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2749,7 +2749,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000165",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2767,7 +2767,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000166",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2785,7 +2785,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000167",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2803,7 +2803,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000168",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2821,7 +2821,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000169",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2837,7 +2837,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000170",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2853,7 +2853,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000171",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2869,7 +2869,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000172",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2885,7 +2885,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000173",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2903,7 +2903,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000174",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -2921,7 +2921,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000175",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2937,7 +2937,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000176",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2953,7 +2953,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000177",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2969,7 +2969,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000178",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -2985,7 +2985,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000179",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3001,7 +3001,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000180",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3017,7 +3017,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000181",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3033,7 +3033,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000182",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3049,7 +3049,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000183",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3065,7 +3065,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000184",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3083,7 +3083,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000185",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3101,7 +3101,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000186",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3117,7 +3117,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000187",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3133,7 +3133,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000188",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3149,7 +3149,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000189",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3165,7 +3165,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000190",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3181,7 +3181,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000191",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3197,7 +3197,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000192",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3213,7 +3213,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000193",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3229,7 +3229,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000194",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3245,7 +3245,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000195",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3261,7 +3261,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000196",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3277,7 +3277,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000197",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3293,7 +3293,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000198",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3309,7 +3309,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000199",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3325,7 +3325,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000200",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3341,7 +3341,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000201",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3357,7 +3357,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000202",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3373,7 +3373,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000203",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3389,7 +3389,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000204",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3405,7 +3405,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000205",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3421,7 +3421,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000206",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3439,7 +3439,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000207",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3457,7 +3457,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000208",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3475,7 +3475,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000209",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3493,7 +3493,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000210",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3509,7 +3509,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000211",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3525,7 +3525,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000212",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3543,7 +3543,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000213",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3561,7 +3561,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000214",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3579,7 +3579,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000215",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3595,7 +3595,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000216",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3611,7 +3611,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000217",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3627,7 +3627,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000218",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3643,7 +3643,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000219",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3659,7 +3659,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000220",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3669,13 +3669,13 @@
         ],
         "type": "Point"
       },
-      "id": "226"
+      "id": "n_2ce1f98e494c"
     },
     {
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000221",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3691,7 +3691,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000222",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3707,7 +3707,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000223",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3723,7 +3723,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000224",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3739,7 +3739,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000225",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3757,7 +3757,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000226",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3773,7 +3773,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000227",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3789,7 +3789,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000228",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3807,7 +3807,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000229",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3825,7 +3825,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000230",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3841,7 +3841,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000231",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3859,7 +3859,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000232",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3875,7 +3875,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000233",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3891,7 +3891,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000234",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3907,7 +3907,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000235",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3925,7 +3925,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000236",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3943,7 +3943,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000237",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -3961,7 +3961,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000238",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3977,7 +3977,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000239",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -3993,7 +3993,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000240",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4011,7 +4011,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000241",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4029,7 +4029,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000242",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4045,7 +4045,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000243",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4061,7 +4061,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000244",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4077,7 +4077,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000245",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4095,7 +4095,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000246",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4111,7 +4111,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000247",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4129,7 +4129,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000248",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4147,7 +4147,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000249",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4163,7 +4163,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000250",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4181,7 +4181,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000251",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4197,7 +4197,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000252",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4215,7 +4215,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000253",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4231,7 +4231,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000254",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4247,7 +4247,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000255",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4263,7 +4263,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000256",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4279,7 +4279,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000257",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4295,7 +4295,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000258",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4311,7 +4311,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000259",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4327,7 +4327,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000260",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4343,7 +4343,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000261",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4359,7 +4359,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000262",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4375,7 +4375,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000263",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4391,7 +4391,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000264",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4407,7 +4407,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000265",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4423,7 +4423,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000266",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4441,7 +4441,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000267",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4457,7 +4457,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000268",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4475,7 +4475,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000269",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4491,7 +4491,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000270",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4507,7 +4507,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000271",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4523,7 +4523,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000272",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4541,7 +4541,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000273",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4557,7 +4557,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000274",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4573,7 +4573,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000275",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4589,7 +4589,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000276",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4605,7 +4605,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000277",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4621,7 +4621,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000278",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4639,7 +4639,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000279",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4655,7 +4655,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000280",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4673,7 +4673,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000281",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4689,7 +4689,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000282",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4705,7 +4705,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000283",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4723,7 +4723,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000284",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4741,7 +4741,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000285",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4757,7 +4757,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000286",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4773,7 +4773,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000287",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4791,7 +4791,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000288",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4807,7 +4807,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000289",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4823,7 +4823,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000290",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4841,7 +4841,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000291",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4859,7 +4859,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000292",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4877,7 +4877,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000293",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4895,7 +4895,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000294",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -4913,7 +4913,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000295",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4929,7 +4929,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000296",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4945,7 +4945,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000297",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4961,7 +4961,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000298",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4977,7 +4977,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000299",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -4993,7 +4993,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000300",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -5011,7 +5011,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000301",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5027,7 +5027,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000302",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5043,7 +5043,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000303",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5059,7 +5059,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000304",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5075,7 +5075,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000305",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5091,7 +5091,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000306",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5107,7 +5107,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000307",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5123,7 +5123,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000308",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5139,7 +5139,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000309",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -5157,7 +5157,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000310",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -5175,7 +5175,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000311",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5191,7 +5191,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000312",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -5209,7 +5209,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000313",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5225,7 +5225,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000314",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5241,7 +5241,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000315",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5257,7 +5257,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000316",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5267,13 +5267,13 @@
         ],
         "type": "Point"
       },
-      "id": "429"
+      "id": "n_628ebc02d391"
     },
     {
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000317",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5289,7 +5289,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000318",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5305,7 +5305,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000319",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5321,7 +5321,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000320",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5337,7 +5337,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000321",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node",
         "isPoi": true,
         "nodeKind": "poi"
@@ -5355,7 +5355,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000322",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5371,7 +5371,7 @@
       "type": "Feature",
       "properties": {
         "_idNormalized": "pt_000323",
-        "_featureTypeNormalized": "point",
+        "_featureTypeNormalized": "node",
         "type": "node"
       },
       "geometry": {
@@ -5382,6 +5382,406 @@
         "type": "Point"
       },
       "id": "451"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000324",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06414472006125,
+          4.631287491605605
+        ],
+        "type": "Point"
+      },
+      "id": "455"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000325",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06352629352885,
+          4.6310948371354925
+        ],
+        "type": "Point"
+      },
+      "id": "456"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000326",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06311295709357,
+          4.630982496260586
+        ],
+        "type": "Point"
+      },
+      "id": "457"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000327",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06233074181877,
+          4.63099253107255
+        ],
+        "type": "Point"
+      },
+      "id": "458"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000328",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06198683755456,
+          4.630987548993986
+        ],
+        "type": "Point"
+      },
+      "id": "459"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000329",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06183254998511,
+          4.630751380859792
+        ],
+        "type": "Point"
+      },
+      "id": "460"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000330",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.0623743502272,
+          4.630866798619863
+        ],
+        "type": "Point"
+      },
+      "id": "461"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000331",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06254406655319,
+          4.630753657597154
+        ],
+        "type": "Point"
+      },
+      "id": "462"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000332",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06278408190786,
+          4.630579583886302
+        ],
+        "type": "Point"
+      },
+      "id": "463"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000333",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06304698586784,
+          4.630369598260231
+        ],
+        "type": "Point"
+      },
+      "id": "464"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000334",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06310674783974,
+          4.629865761555578
+        ],
+        "type": "Point"
+      },
+      "id": "465"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000335",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06278303757628,
+          4.6296769168933025
+        ],
+        "type": "Point"
+      },
+      "id": "466"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000336",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06244508726273,
+          4.630061978145136
+        ],
+        "type": "Point"
+      },
+      "id": "467"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000337",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06198940257443,
+          4.630392077988532
+        ],
+        "type": "Point"
+      },
+      "id": "468"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000338",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06189970949355,
+          4.630570621900873
+        ],
+        "type": "Point"
+      },
+      "id": "469"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000339",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06310810881061,
+          4.629180528320418
+        ],
+        "type": "Point"
+      },
+      "id": "474"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000340",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.065506925031,
+          4.626511016904857
+        ],
+        "type": "Point"
+      },
+      "id": "477"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000341",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06477228696022,
+          4.626349608180391
+        ],
+        "type": "Point"
+      },
+      "id": "478"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000342",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06407319589228,
+          4.626180325820073
+        ],
+        "type": "Point"
+      },
+      "id": "479"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000343",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06314107728693,
+          4.625979549618435
+        ],
+        "type": "Point"
+      },
+      "id": "480"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000344",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06347679898572,
+          4.626247252011865
+        ],
+        "type": "Point"
+      },
+      "id": "481"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000345",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06310158061619,
+          4.626121274427234
+        ],
+        "type": "Point"
+      },
+      "id": "482"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000346",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06350049698817,
+          4.626361419179332
+        ],
+        "type": "Point"
+      },
+      "id": "483"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000347",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06264206162699,
+          4.62930477325429
+        ],
+        "type": "Point"
+      },
+      "id": "485"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "pt_000348",
+        "_featureTypeNormalized": "point",
+        "type": "node"
+      },
+      "geometry": {
+        "coordinates": [
+          -74.06244852794121,
+          4.6293913824572
+        ],
+        "type": "Point"
+      },
+      "id": "486"
     },
     {
       "type": "Feature",
@@ -9011,6 +9411,254 @@
     {
       "type": "Feature",
       "properties": {
+        "_idNormalized": "ln_000132",
+        "_featureTypeNormalized": "linestring"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -74.06332865330478,
+            4.629964877606639
+          ],
+          [
+            -74.06304698586784,
+            4.630369598260231
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "ln_000133",
+        "_featureTypeNormalized": "linestring"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -74.06415876881283,
+            4.631235114469746
+          ],
+          [
+            -74.06413884708294,
+            4.631290885014337
+          ],
+          [
+            -74.06352217796706,
+            4.631094195179514
+          ],
+          [
+            -74.06311260934706,
+            4.63097827356259
+          ],
+          [
+            -74.06233114186287,
+            4.63099035478659
+          ],
+          [
+            -74.06236814201006,
+            4.630868960234224
+          ],
+          [
+            -74.0625346426711,
+            4.630756785502129
+          ],
+          [
+            -74.06278593529527,
+            4.630581608528445
+          ],
+          [
+            -74.06304698586784,
+            4.630369598260231
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "ln_000134",
+        "_featureTypeNormalized": "linestring"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -74.06233074181877,
+            4.63099253107255
+          ],
+          [
+            -74.0619995686272,
+            4.630997429518374
+          ],
+          [
+            -74.06182844294746,
+            4.630753103753918
+          ],
+          [
+            -74.06190090168383,
+            4.630584451986678
+          ],
+          [
+            -74.06198735059043,
+            4.630391740402246
+          ],
+          [
+            -74.06244067576834,
+            4.6300635819574865
+          ],
+          [
+            -74.06277725342703,
+            4.629684216233727
+          ],
+          [
+            -74.06310809022298,
+            4.629863077339323
+          ],
+          [
+            -74.06332865330478,
+            4.629964877606639
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "ln_000135",
+        "_featureTypeNormalized": "linestring"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -74.06278303757628,
+            4.6296769168933025
+          ],
+          [
+            -74.06310810881061,
+            4.629180528320418
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "ln_000136",
+        "_featureTypeNormalized": "linestring"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -74.06310810881061,
+            4.629180528320418
+          ],
+          [
+            -74.06316792647321,
+            4.629095051648491
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "ln_000137",
+        "_featureTypeNormalized": "linestring"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -74.06310810881061,
+            4.629180528320418
+          ],
+          [
+            -74.06308038174267,
+            4.629124063671881
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "ln_000138",
+        "_featureTypeNormalized": "linestring"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -74.06337815835143,
+            4.626340871603276
+          ],
+          [
+            -74.06350444665523,
+            4.626388976767913
+          ],
+          [
+            -74.06347284931866,
+            4.626255125610214
+          ],
+          [
+            -74.06310158061619,
+            4.626117337627321
+          ],
+          [
+            -74.06314107728693,
+            4.625979549618435
+          ],
+          [
+            -74.06407714837762,
+            4.626192136821842
+          ],
+          [
+            -74.06477236438849,
+            4.62634960889298
+          ],
+          [
+            -74.06550305279217,
+            4.626514954414333
+          ],
+          [
+            -74.06542976060375,
+            4.626796423133442
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "_idNormalized": "ln_000139",
+        "_featureTypeNormalized": "linestring"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            -74.06265391062738,
+            4.6289937673954284
+          ],
+          [
+            -74.06265786029444,
+            4.62930477325429
+          ],
+          [
+            -74.06244852794121,
+            4.6293913824572
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "_idNormalized": "pg_000001",
         "_featureTypeNormalized": "polygon"
       },
@@ -9040,7 +9688,8 @@
           ]
         ],
         "type": "Polygon"
-      }
+      },
+      "id": 454
     }
   ]
 }

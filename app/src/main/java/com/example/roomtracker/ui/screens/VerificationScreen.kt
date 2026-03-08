@@ -1,15 +1,15 @@
-package com.example.roomtracker.screens
+package com.example.roomtracker.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.roomtracker.ui.theme.BackgroundGray
@@ -18,12 +18,12 @@ import com.example.roomtracker.ui.theme.LightText
 import com.example.roomtracker.ui.theme.PrimaryOrange
 
 @Composable
-fun ForgotPasswordScreen(
-    onSendEmail: () -> Unit,
+fun VerificationScreen(
+    onCodeVerified: () -> Unit,
     onBack: () -> Unit
 ) {
 
-    var email by remember { mutableStateOf("") }
+    var code by remember { mutableStateOf(List(6) { "" }) }
 
     Column(
         modifier = Modifier
@@ -44,7 +44,7 @@ fun ForgotPasswordScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Recuperar Acceso",
+            text = "Autenticación",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             color = DarkText
@@ -53,32 +53,44 @@ fun ForgotPasswordScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Ingresa tu correo institucional para recuperar tu contraseña",
+            text = "Introduce el código de verificación enviado a tu correo",
             fontSize = 16.sp,
             color = LightText
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(40.dp))
 
-        Text("Correo Electrónico")
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            leadingIcon = {
-                Icon(Icons.Default.Email, contentDescription = null)
-            },
-            placeholder = { Text("usuario@javeriana.edu.co") },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp)
-        )
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            repeat(6) { index ->
+                OutlinedTextField(
+                    value = code[index],
+                    onValueChange = { value ->
+                        if (value.length <= 1) {
+                            code = code.toMutableList().also {
+                                it[index] = value
+                            }
+                        }
+                    },
+                    modifier = Modifier
+                        .width(48.dp)
+                        .height(56.dp),
+                    singleLine = true,
+                    textStyle = LocalTextStyle.current.copy(
+                        textAlign = TextAlign.Center,
+                        fontSize = 18.sp
+                    ),
+                    shape = RoundedCornerShape(12.dp)
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
-            onClick = onSendEmail,
+            onClick = onCodeVerified,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
@@ -86,9 +98,15 @@ fun ForgotPasswordScreen(
             shape = RoundedCornerShape(16.dp)
         ) {
             Text(
-                text = "Enviar Correo",
+                text = "Comprobar Código",
                 fontSize = 18.sp
             )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TextButton(onClick = { /* luego agregamos reenvío */ }) {
+            Text("Reenviar código en 1:58")
         }
     }
 }

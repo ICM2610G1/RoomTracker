@@ -4,17 +4,17 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.roomtracker.screens.ChatScreen
-import com.example.roomtracker.screens.ForgotPasswordSentScreen
-import com.example.roomtracker.screens.LoginScreen
-import com.example.roomtracker.screens.RegisterScreen
-import com.example.roomtracker.screens.VerificationScreen
-import com.example.roomtracker.screens.RegisterSuccessScreen
-import com.example.roomtracker.screens.ForgotPasswordScreen
-import com.example.roomtracker.screens.HomeMapScreen
-import com.example.roomtracker.screens.SettingsScreen
-import com.example.roomtracker.screens.MessagesScreen
-import com.example.roomtracker.screens.PrivacyFriendsScreen
+import com.example.roomtracker.ui.screens.ChatScreen
+import com.example.roomtracker.ui.screens.ForgotPasswordSentScreen
+import com.example.roomtracker.ui.screens.LoginScreen
+import com.example.roomtracker.ui.screens.RegisterScreen
+import com.example.roomtracker.ui.screens.VerificationScreen
+import com.example.roomtracker.ui.screens.RegisterSuccessScreen
+import com.example.roomtracker.ui.screens.ForgotPasswordScreen
+import com.example.roomtracker.ui.screens.HomeMapScreen
+import com.example.roomtracker.ui.screens.SettingsScreen
+import com.example.roomtracker.ui.screens.MessagesScreen
+import com.example.roomtracker.ui.screens.PrivacyFriendsScreen
 
 enum class AppScreens {
     Login,
@@ -34,15 +34,21 @@ fun Navigation() {
 
     val navController = rememberNavController()
 
-
     NavHost(
         navController = navController,
-        startDestination = AppScreens.HomeMap.name
+        startDestination = AppScreens.Login.name
     ) {
 
         composable(AppScreens.Login.name) {
             LoginScreen(
-                onLoginClick = { },
+                onLoginClick = { campus, mail, password ->
+
+                    println("Campus: $campus")
+                    println("Email: $mail")
+                    println("Password: $password")
+
+                    navController.navigate(AppScreens.HomeMap.name)
+                },
                 onRegisterClick = {
                     navController.navigate(AppScreens.Register.name)
                 },

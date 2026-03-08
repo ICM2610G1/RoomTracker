@@ -1,4 +1,4 @@
-package com.example.roomtracker.screens
+package com.example.roomtracker.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.roomtracker.ui.components.common.ScreenHeader
 import com.example.roomtracker.ui.theme.BackgroundGray
 import com.example.roomtracker.ui.theme.DarkText
 import com.example.roomtracker.ui.theme.LightText
@@ -43,23 +44,10 @@ fun ChatScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         // HEADER
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-        ) {
-
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = null)
-            }
-
-            Text(
-                text = title,
-                fontSize = 18.sp,
-                color = DarkText
-            )
-        }
+        ScreenHeader(
+            title = title,
+            onBack = onBack
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 

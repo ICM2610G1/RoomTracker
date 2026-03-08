@@ -9,6 +9,7 @@ import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
+
 data class CampusData(
     val polygons: List<PolygonOptions>,
     val paths: List<PolylineOptions>,
@@ -100,5 +101,37 @@ object CampusLayer {
             paths = paths,
             pois = pois
         )
+    }
+
+    fun loadGraphCoordinates(context: Context): Map<String, LatLng> {
+
+        val inputStream = context.assets.open("campus_updated.geojson")
+        val json = inputStream.bufferedReader().use { it.readText() }
+
+        val jsonObject = JSONObject(json)
+        val features = jsonObject.getJSONArray("features")
+
+        val coordinates = mutableMapOf<String, LatLng>()
+
+        for (i in 0 until features.length()) {
+
+            val feature = features.getJSONObject(i)
+            val properties = feature.getJSONObject("properties")
+
+            if (properties.optString("type") == "node") {
+
+                val id = feature.getString("id")
+
+                val geometry = feature.getJSONObject("geometry")
+                val coords = geometry.getJSONArray("coordinates")
+
+                val lng = coords.getDouble(0)
+                val lat = coords.getDouble(1)
+
+                coordinates[id] = LatLng(lat, lng)
+            }
+        }
+
+        return coordinates
     }
 }

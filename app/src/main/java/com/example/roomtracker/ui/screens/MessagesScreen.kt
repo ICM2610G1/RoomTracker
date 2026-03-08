@@ -1,6 +1,6 @@
-package com.example.roomtracker.screens
-
-
+package com.example.roomtracker.ui.screens
+import com.example.roomtracker.ui.components.common.ScreenHeader
+import com.example.roomtracker.ui.components.common.SearchField
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,6 +10,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,7 +37,7 @@ fun MessagesScreen(
     navController: NavController,
     onBack: () -> Unit
 ) {
-
+    var search by remember { mutableStateOf("") }
     val conversations = listOf(
         Conversation(
             "Soporte Técnico Campus",
@@ -63,48 +67,31 @@ fun MessagesScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         // HEADER
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = null)
+        ScreenHeader(
+            title = "Mensajes",
+            onBack = onBack,
+            action = {
+                FloatingActionButton(
+                    onClick = {
+                        navController.navigate(
+                            AppScreens.Chat.name + "/Nuevo Chat"
+                        )
+                    },
+                    containerColor = PrimaryOrange,
+                    modifier = Modifier.size(48.dp)
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = null)
+                }
             }
-
-            Text(
-                text = "Mensajes",
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = DarkText,
-                modifier = Modifier.weight(1f)
-            )
-
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate(
-                        AppScreens.Chat.name + "/Nuevo Chat"
-                    )
-                },
-                containerColor = PrimaryOrange,
-                modifier = Modifier.size(48.dp)
-            ) {
-                Icon(Icons.Default.Add, contentDescription = null)
-            }
-        }
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         // SEARCH
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            placeholder = { Text("Buscar conversación...") },
-            leadingIcon = {
-                Icon(Icons.Default.Search, contentDescription = null)
-            },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(20.dp)
+        SearchField(
+            value = search,
+            onValueChange = { search = it },
+            placeholder = "Buscar conversación..."
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -126,6 +113,7 @@ fun MessagesScreen(
         }
     }
 }
+
 @Composable
 fun ConversationItem(
     conversation: Conversation,
