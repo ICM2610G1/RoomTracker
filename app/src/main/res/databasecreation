@@ -1,0 +1,236 @@
+-- INSTITUCION
+CREATE TABLE institucion (
+  id_institucion UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  nombre TEXT NOT NULL,
+  dominio_correo TEXT,
+  es_privada BOOLEAN NOT NULL DEFAULT false
+);
+
+-- USUARIOS (perfil vinculado al auth de Supabase)
+CREATE TABLE usuarios (
+  id_usuario UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  nombre TEXT NOT NULL,
+  apellido TEXT NOT NULL,
+  tipo TEXT NOT NULL CHECK (tipo IN ('estudiante', 'profesor')),
+  estado TEXT NOT NULL DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'activo', 'inactivo')),
+  fecha_creacion TIMESTAMPTZ NOT NULL DEFAULT now(),
+  fecha_actualizacion TIMESTAMPTZ NOT NULL DEFAULT now(),
+  fecha_eliminacion TIMESTAMPTZ,
+  eliminado_por UUID
+);
+
+-- CARNET
+CREATE TABLE carnet (
+  id_carnet UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_usuario UUID UNIQUE NOT NULL REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+  codigo_estudiante TEXT UNIQUE NOT NULL,
+  programa TEXT NOT NULL,
+  facultad TEXT NOT NULL,
+  fecha_expedicion DATE NOT NULL DEFAULT CURRENT_DATE,
+  fecha_vencimiento DATE,
+  codigo_qr TEXT UNIQUE NOT NULL,
+  activo BOOLEAN NOT NULL DEFAULT true
+);
+
+-- AMISTAD
+CREATE TABLE amistad (
+  id_amistad UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_usuario_1 UUID NOT NULL REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+  id_usuario_2 UUID NOT NULL REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+  estado TEXT NOT NULL DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'aceptada', 'bloqueada')),
+  fecha_creacion TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (id_usuario_1, id_usuario_2),
+  CHECK (id_usuario_1 < id_usuario_2)
+);
+
+-- TIPO_ESPACIO
+CREATE TABLE tipo_espacio (
+  id_tipo UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  nombre TEXT UNIQUE NOT NULL
+);
+
+INSERT INTO tipo_espacio (nombre) VALUES
+  ('laboratorio'),('salón'),('sala_de_estudio'),('sala_de_juegos'),
+  ('sala_de_descanso'),('baño'),('cubículo'),('acondicionamiento_físico'),
+  ('oficina'),('auditorio'),('cafetería'),('agua'),('restaurante'),
+  ('parqueadero'),('cancha'),('biblioteca'),('capilla'),('enfermería'),
+  ('edificio'),('bus');
+
+-- MAP_GRAPH
+CREATE TABLE map_graph (
+  id_grafo UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_institucion UUID NOT NULL REFERENCES institucion(id_institucion) ON DELETE CASCADE,
+  nombre TEXT,
+  datos JSONB NOT NULL,
+  activo BOOLEAN NOT NULL DEFAULT true
+);
+
+-- MAP_LAYER
+CREATE TABLE map_layer (
+  id_layer UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_institucion UUID NOT NULL REFERENCES institucion(id_institucion) ON DELETE CASCADE,
+  nombre TEXT,
+  tipo TEXT,
+  datos JSONB NOT NULL,
+  activo BOOLEAN NOT NULL DEFAULT true
+);
+
+-- EDIFICIO
+CREATE TABLE edificio (
+  id_edificio UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_grafo UUID NOT NULL REFERENCES map_graph(id_grafo) ON DELETE CASCADE,
+  id_nodo TEXT NOT NULL,
+  nombre TEXT NOT NULL,
+  descripcion TEXT,
+  activo BOOLEAN NOT NULL DEFAULT true,
+  tipo TEXT NOT NULL,
+  UNIQUE (id_grafo, id_nodo)
+);
+
+-- PISO
+CREATE TABLE piso (
+  id_piso UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_edificio UUID NOT NULL REFERENCES edificio(id_edificio) ON DELETE CASCADE,
+  id_institucion UUID NOT NULL REFERENCES institucion(id_institucion),
+  numero INT NOT NULL,
+  nombre TEXT,
+  plano_emergencia_url TEXT
+);
+
+-- ESPACIO
+CREATE TABLE espacio (
+  id_espacio UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_piso UUID NOT NULL REFERENCES piso(id_piso) ON DELETE CASCADE,
+  id_nodo TEXT,
+  nombre TEXT NOT NULL,
+  descripcion TEXT,
+  link_externo TEXT
+);
+
+-- ESPACIO_TIPO (junction)
+CREATE TABLE espacio_tipo (
+  id_espacio UUID NOT NULL REFERENCES espacio(id_espacio) ON DELETE CASCADE,
+  id_tipo UUID NOT NULL REFERENCES tipo_espacio(id_tipo) ON DELETE CASCADE,
+  PRIMARY KEY (id_espacio, id_tipo)
+);
+
+-- CONTENIDO
+CREATE TABLE contenido (
+  id_contenido UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_espacio UUID NOT NULL REFERENCES espacio(id_espacio) ON DELETE CASCADE,
+  tipo TEXT NOT NULL CHECK (tipo IN ('imagen', 'texto', 'video', 'link')),
+  url TEXT,
+  contenido_texto TEXT,
+  orden INT
+);
+
+-- HORARIO
+CREATE TABLE horario (
+  id_horario UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_usuario UUID NOT NULL REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+  id_espacio UUID REFERENCES espacio(id_espacio),
+  titulo TEXT NOT NULL,
+  dia_semana TEXT NOT NULL CHECK (dia_semana IN ('lunes','martes','miércoles','jueves','viernes','sábado')),
+  hora_inicio TIME NOT NULL,
+  hora_fin TIME NOT NULL,
+  imagen_url TEXT,
+  notificar_antes_min INT,
+  activo BOOLEAN NOT NULL DEFAULT true
+);
+
+-- NOTIFICACION
+CREATE TABLE notificacion (
+  id_notificacion UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_usuario UUID NOT NULL REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+  id_horario UUID REFERENCES horario(id_horario),
+  titulo TEXT NOT NULL,
+  mensaje TEXT NOT NULL,
+  fecha_programada TIMESTAMPTZ NOT NULL,
+  enviada BOOLEAN NOT NULL DEFAULT false,
+  leida BOOLEAN NOT NULL DEFAULT false
+);
+
+-- CHAT
+CREATE TABLE chat (
+  id_chat UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_usuario UUID NOT NULL REFERENCES usuarios(id_usuario),
+  id_sesion UUID,
+  contexto_tipo TEXT CHECK (contexto_tipo IN ('soporte', 'cafetería', 'biblioteca')),
+  contexto_id TEXT
+);
+
+-- MENSAJE
+CREATE TABLE mensaje (
+  id_mensaje UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_chat UUID NOT NULL REFERENCES chat(id_chat) ON DELETE CASCADE,
+  id_emisor UUID NOT NULL REFERENCES usuarios(id_usuario),
+  tipo TEXT NOT NULL CHECK (tipo IN ('texto', 'imagen', 'video')),
+  contenido_texto TEXT,
+  fecha_envio TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- ARCHIVO
+CREATE TABLE archivo (
+  id_archivo UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_mensaje UUID NOT NULL REFERENCES mensaje(id_mensaje) ON DELETE CASCADE,
+  url TEXT NOT NULL,
+  tipo_mime TEXT,
+  tamaño INT
+);
+
+-- EVENTO
+CREATE TABLE evento (
+  id_evento UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_institucion UUID NOT NULL REFERENCES institucion(id_institucion) ON DELETE CASCADE,
+  id_espacio UUID REFERENCES espacio(id_espacio),
+  titulo TEXT NOT NULL,
+  descripcion TEXT,
+  imagen_url TEXT,
+  fecha_inicio TIMESTAMPTZ NOT NULL,
+  fecha_fin TIMESTAMPTZ NOT NULL,
+  tipo TEXT NOT NULL CHECK (tipo IN ('charla', 'taller', 'deportivo', 'cultural', 'académico')),
+  url_inscripcion TEXT,
+  activo BOOLEAN NOT NULL DEFAULT true,
+  CHECK (fecha_inicio < fecha_fin)
+);
+
+-- OPORTUNIDAD
+CREATE TABLE oportunidad (
+  id_oportunidad UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_institucion UUID NOT NULL REFERENCES institucion(id_institucion) ON DELETE CASCADE,
+  id_creador UUID NOT NULL REFERENCES usuarios(id_usuario),
+  titulo TEXT NOT NULL,
+  descripcion TEXT,
+  tipo TEXT NOT NULL CHECK (tipo IN ('empleo', 'práctica', 'beca', 'investigación', 'voluntariado')),
+  requisitos TEXT,
+  fecha_publicacion TIMESTAMPTZ NOT NULL DEFAULT now(),
+  fecha_cierre TIMESTAMPTZ,
+  url_externa TEXT,
+  url_inscripcion TEXT,
+  activo BOOLEAN NOT NULL DEFAULT true
+);
+
+-- MENU_ITEM
+CREATE TABLE menu_item (
+  id_item UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_espacio UUID NOT NULL REFERENCES espacio(id_espacio) ON DELETE CASCADE,
+  nombre TEXT NOT NULL,
+  descripcion TEXT,
+  precio DECIMAL(10,2) NOT NULL CHECK (precio > 0),
+  tipo TEXT NOT NULL CHECK (tipo IN ('desayuno', 'almuerzo', 'cena', 'snack', 'bebida')),
+  imagen_url TEXT,
+  disponible BOOLEAN NOT NULL DEFAULT true,
+  dia_semana TEXT CHECK (dia_semana IN ('lunes','martes','miércoles','jueves','viernes','sábado','domingo'))
+);
+
+-- PRODUCTO
+CREATE TABLE producto (
+  id_producto UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_institucion UUID NOT NULL REFERENCES institucion(id_institucion) ON DELETE CASCADE,
+  nombre TEXT NOT NULL,
+  descripcion TEXT,
+  precio DECIMAL(10,2) NOT NULL CHECK (precio > 0),
+  stock INT,
+  imagen_url TEXT,
+  activo BOOLEAN NOT NULL DEFAULT true
+);

@@ -18,8 +18,25 @@ import com.example.roomtracker.ui.theme.BackgroundGray
 import com.example.roomtracker.ui.theme.DarkText
 import com.example.roomtracker.ui.theme.LightText
 import com.example.roomtracker.ui.theme.PrimaryOrange
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import android.net.Uri
+import androidx.compose.foundation.Image
+import coil.compose.rememberAsyncImagePainter
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.core.content.FileProvider
+import androidx.compose.ui.platform.LocalContext
+import java.io.File
+import java.util.*
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
+import android.Manifest
+
 data class ChatMessage(
-    val text: String,
+    val text: String? = null,
+    val imageUri: Uri? = null,
     val time: String,
     val isMine: Boolean
 )
@@ -30,10 +47,66 @@ fun ChatScreen(
 ) {
 
     var message by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    var messages by remember {
+        mutableStateOf(
+            listOf(
+                ChatMessage(text = "Hola, ¿en qué podemos ayudarte hoy?", time = "10:45 AM", isMine = false)
+            )
+        )
+    }
 
-    val messages = listOf(
-        ChatMessage("Hola, ¿en qué podemos ayudarte hoy?", "10:45 AM", false)
-    )
+    // Launcher para Galería
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            messages = messages + ChatMessage(imageUri = it, time = "10:46 AM", isMine = true)
+        }
+    }
+
+    // Launcher para Cámara
+    var tempImageUri by remember { mutableStateOf<Uri?>(null) }
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success) {
+            tempImageUri?.let {
+                messages = messages + ChatMessage(imageUri = it, time = "10:46 AM", isMine = true)
+            }
+        }
+    }
+
+    fun launchCamera() {
+        val file = File(context.cacheDir, "camera_photo_${System.currentTimeMillis()}.jpg")
+        val uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.provider",
+            file
+        )
+        tempImageUri = uri
+        cameraLauncher.launch(uri)
+    }
+
+    // Launcher para Permisos
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            launchCamera()
+        }
+    }
+
+    fun checkAndLaunchCamera() {
+        when (PackageManager.PERMISSION_GRANTED) {
+            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) -> {
+                launchCamera()
+            }
+            else -> {
+                permissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -71,8 +144,12 @@ fun ChatScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            IconButton(onClick = { }) {
-                Icon(Icons.Default.Image, contentDescription = null)
+            IconButton(onClick = { galleryLauncher.launch("image/*") }) {
+                Icon(Icons.Default.Image, contentDescription = "Galería")
+            }
+
+            IconButton(onClick = { checkAndLaunchCamera() }) {
+                Icon(Icons.Default.CameraAlt, contentDescription = "Cámara")
             }
 
             OutlinedTextField(
@@ -86,7 +163,12 @@ fun ChatScreen(
             Spacer(modifier = Modifier.width(8.dp))
 
             FloatingActionButton(
-                onClick = { },
+                onClick = {
+                    if (message.isNotBlank()) {
+                        messages = messages + ChatMessage(text = message, time = "10:47 AM", isMine = true)
+                        message = ""
+                    }
+                },
                 containerColor = PrimaryOrange,
                 modifier = Modifier.size(48.dp)
             ) {
@@ -110,7 +192,23 @@ fun ChatBubble(message: ChatMessage) {
             Column(
                 modifier = Modifier.padding(12.dp)
             ) {
-                Text(message.text)
+                if (message.imageUri != null) {
+                    Image(
+                        painter = rememberAsyncImagePainter(message.imageUri),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f)
+                            .aspectRatio(1f)
+                            .clip(RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+                
+                if (message.text != null) {
+                    Text(message.text)
+                }
+
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     message.time,

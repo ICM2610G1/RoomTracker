@@ -11,6 +11,7 @@ class SensorViewModel(application: Application) :
         SensorRepository(application)
 
     val orientation = repository.orientation
+    val lightLevel = repository.lightLevel
 
     fun startSensors() {
         repository.start()

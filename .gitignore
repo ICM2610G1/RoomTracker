@@ -39,6 +39,9 @@ misc.xml
 deploymentTargetDropDown.xml
 render.experimental.xml
 
+# Claude folders
+.claude/
+
 # Keystore files
 *.jks
 *.keystore

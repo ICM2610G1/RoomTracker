@@ -20,10 +20,9 @@ object CampusLayer {
 
     fun loadCampus(context: Context): CampusData {
 
-        val inputStream = context.assets.open("campus_updated.geojson")
-        val reader = BufferedReader(InputStreamReader(inputStream))
-        val jsonString = reader.readText()
-        reader.close()
+        val localFile = java.io.File(context.filesDir, "campus_updated.geojson")
+        if (!localFile.exists()) return CampusData(emptyList(), emptyList(), emptyList())
+        val jsonString = localFile.readText()
 
         val json = JSONObject(jsonString)
         val features = json.getJSONArray("features")
@@ -88,7 +87,8 @@ object CampusLayer {
                         val lng = coordinates.getDouble(0)
                         val lat = coordinates.getDouble(1)
 
-                        val name = properties.optString("name", "POI")
+                        val name = properties.optString("name", "")
+                            .ifBlank { feature.optString("id", "POI $i") }
 
                         pois.add(name to LatLng(lat, lng))
                     }
@@ -105,8 +105,9 @@ object CampusLayer {
 
     fun loadGraphCoordinates(context: Context): Map<String, LatLng> {
 
-        val inputStream = context.assets.open("campus_updated.geojson")
-        val json = inputStream.bufferedReader().use { it.readText() }
+        val localFile = java.io.File(context.filesDir, "campus_updated.geojson")
+        if (!localFile.exists()) return emptyMap()
+        val json = localFile.readText()
 
         val jsonObject = JSONObject(json)
         val features = jsonObject.getJSONArray("features")
@@ -133,5 +134,32 @@ object CampusLayer {
         }
 
         return coordinates
+    }
+
+    fun loadEdgeGeometry(context: Context): Map<Pair<String, String>, List<LatLng>> {
+
+        val localFile = java.io.File(context.filesDir, "edge_geometry.json")
+        if (!localFile.exists()) return emptyMap()
+        val json = localFile.readText()
+        val jsonObject = JSONObject(json)
+        val edgeGeometry = mutableMapOf<Pair<String, String>, List<LatLng>>()
+
+        val keys = jsonObject.keys()
+        while (keys.hasNext()) {
+            val key = keys.next()
+            val parts = key.split("|")
+            if (parts.size != 2) continue
+            val startId = parts[0]
+            val endId = parts[1]
+            val coordsArray = jsonObject.getJSONArray(key)
+            val points = mutableListOf<LatLng>()
+            for (i in 0 until coordsArray.length()) {
+                val pt = coordsArray.getJSONArray(i)
+                points.add(LatLng(pt.getDouble(1), pt.getDouble(0)))
+            }
+            edgeGeometry[startId to endId] = points
+        }
+
+        return edgeGeometry
     }
 }

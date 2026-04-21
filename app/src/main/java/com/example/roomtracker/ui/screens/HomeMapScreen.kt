@@ -3,8 +3,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import java.util.PriorityQueue
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationCallback
@@ -33,27 +31,28 @@ import com.google.maps.android.compose.*
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.ui.geometry.Offset
 import androidx.navigation.NavController
 import com.example.roomtracker.navigation.AppScreens
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.launch
+import com.example.roomtracker.map.CampusData
 import com.example.roomtracker.map.CampusLayer
 
 import com.example.roomtracker.ui.components.map.BottomSheetContent
 import com.example.roomtracker.ui.components.map.BuildingDetailSheet
-import com.example.roomtracker.utils.generateRandomLocation
 import com.example.roomtracker.utils.distanceMeters
-import com.example.roomtracker.ui.components.map.ShareLocationDialog
 import com.example.roomtracker.ui.components.map.SmallFab
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.roomtracker.viewmodel.AuthViewModel
 import com.example.roomtracker.viewmodel.SensorViewModel
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.example.roomtracker.R
 
 import com.example.roomtracker.map.AStar
 import com.example.roomtracker.map.GraphUtils
 import com.example.roomtracker.map.GraphLoader
-import com.example.roomtracker.map.KShortestPaths
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("MissingPermission")
@@ -63,31 +62,57 @@ fun HomeMapScreen(navController: NavController) {
     var routingDestinationName by remember { mutableStateOf<String?>(null) }
     var isRouting by remember { mutableStateOf(false) }
     var routeDestination by remember { mutableStateOf<LatLng?>(null) }
-    var simulatedUserLocation by remember { mutableStateOf<LatLng?>(null) }
     var selectedPoi by remember { mutableStateOf<Pair<String, LatLng>?>(null) }
-    var showShareDialog by remember { mutableStateOf(false) }
-    var showPaths by remember { mutableStateOf(true) }
     var showPois by remember { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val sensorViewModel: SensorViewModel = viewModel()
-    val graph = remember(context) {
-        GraphLoader.loadGraph(context)
-    }
-    var routes by remember { mutableStateOf<List<List<String>>>(emptyList()) }
-    var selectedRouteIndex by remember { mutableStateOf(0) }
-    var showAlternative by remember { mutableStateOf(false) }
+    val authViewModel: AuthViewModel = viewModel()
+    val mapFilesReady by authViewModel.mapFilesReady.collectAsStateWithLifecycle()
+    android.util.Log.d("RT_MAP", "mapFilesReady=$mapFilesReady")
 
-    val graphCoordinates = remember(context) {
-        CampusLayer.loadGraphCoordinates(context)
+    val targetLocation = navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.get<LatLng>("targetLocation")
+    val targetName = navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.get<String>("targetName")
+
+    LaunchedEffect(targetLocation, targetName) {
+        if (targetLocation != null && targetName != null) {
+            routeDestination = targetLocation
+            routingDestinationName = targetName
+            isRouting = true
+            // Limpiar para evitar re-navegaciones infinitas
+            navController.currentBackStackEntry?.savedStateHandle?.remove<LatLng>("targetLocation")
+            navController.currentBackStackEntry?.savedStateHandle?.remove<String>("targetName")
+        }
     }
+
+    val graphCoordinates = remember(mapFilesReady) {
+        if (mapFilesReady) CampusLayer.loadGraphCoordinates(context) else emptyMap()
+    }
+
+    val edgeGeometry = remember(mapFilesReady) {
+        if (mapFilesReady) CampusLayer.loadEdgeGeometry(context) else emptyMap()
+    }
+
+    val graph = remember(mapFilesReady) {
+        if (mapFilesReady) GraphLoader.loadGraph(context) else emptyMap()
+    }
+
+    var route by remember { mutableStateOf<List<String>>(emptyList()) }
+    var lastStartNode by remember { mutableStateOf<String?>(null) }
+    var lastRouteCalculationTime by remember { mutableLongStateOf(0L) }
+    var lastLocationForRoute by remember { mutableStateOf<LatLng?>(null) }
 
     val orientation by sensorViewModel.orientation.collectAsState()
+    val lightLevel by sensorViewModel.lightLevel.collectAsState()
 
     var search by remember { mutableStateOf("") }
 
-    val campusData = remember(context) {
-        CampusLayer.loadCampus(context)
+    val campusData = remember(mapFilesReady) {
+        if (mapFilesReady) CampusLayer.loadCampus(context) else CampusData(emptyList(), emptyList(), emptyList())
     }
     val campusBounds = remember(campusData) {
 
@@ -115,6 +140,7 @@ fun HomeMapScreen(navController: NavController) {
         ).build()
     }
     var userLocation by remember { mutableStateOf<LatLng?>(null) }
+    var hasInitiallyCentered by remember { mutableStateOf(false) }
     val locationCallback = remember {
 
         object : LocationCallback() {
@@ -167,24 +193,18 @@ fun HomeMapScreen(navController: NavController) {
             }
         }
 
-    // 🔥 Obtener ubicación real
-    // Obtener ubicación
     LaunchedEffect(Unit) {
-
         when {
-
             ContextCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED -> {
-
                 fusedLocationClient.requestLocationUpdates(
                     locationRequest,
                     locationCallback,
                     Looper.getMainLooper()
                 )
             }
-
             else -> {
                 permissionLauncher.launch(
                     Manifest.permission.ACCESS_FINE_LOCATION
@@ -193,7 +213,25 @@ fun HomeMapScreen(navController: NavController) {
         }
     }
 
-// iniciar sensores
+    LaunchedEffect(userLocation) {
+        if (!hasInitiallyCentered) {
+            userLocation?.let { location ->
+                cameraPositionState.animate(
+                    CameraUpdateFactory.newCameraPosition(
+                        CameraPosition(
+                            location,
+                            19f,
+                            0f,
+                            0f
+                        )
+                    ),
+                    durationMs = 2000
+                )
+                hasInitiallyCentered = true
+            }
+        }
+    }
+
     LaunchedEffect(Unit) {
         sensorViewModel.startSensors()
     }
@@ -215,11 +253,8 @@ fun HomeMapScreen(navController: NavController) {
     val sheetState = rememberModalBottomSheetState()
 
     LaunchedEffect(isRouting, userLocation, routeDestination) {
-
         if (isRouting && userLocation != null) {
-
             val location = userLocation!!
-
             cameraPositionState.animate(
                 CameraUpdateFactory.newCameraPosition(
                     CameraPosition(
@@ -239,47 +274,75 @@ fun HomeMapScreen(navController: NavController) {
             graphCoordinates.isNotEmpty() &&
             graph.isNotEmpty()
         ) {
+            val currentTime = System.currentTimeMillis()
+            val shouldRecalculate =
+                lastLocationForRoute == null ||
+                distanceMeters(lastLocationForRoute!!, userLocation!!) > 8 ||
+                (currentTime - lastRouteCalculationTime) > 5000
 
-            val startNode = GraphUtils.nearestNode(
-                graphCoordinates,
-                userLocation!!,
-                graph
-            )
+            if (shouldRecalculate) {
+                lastRouteCalculationTime = currentTime
+                lastLocationForRoute = userLocation
 
-            val endNode = GraphUtils.nearestNode(
-                graphCoordinates,
-                routeDestination!!,
-                graph
-            )
+                val newStartNode = GraphUtils.nearestNode(
+                    graphCoordinates,
+                    userLocation!!,
+                    graph
+                )
 
-            routes = KShortestPaths.findKPaths(
-                graph,
-                startNode,
-                endNode,
-                3
-            )
+                val startNode =
+                    if (lastStartNode == null ||
+                        GraphUtils.distanceMeters(
+                            graphCoordinates[lastStartNode]!!,
+                            graphCoordinates[newStartNode]!!
+                        ) > 10
+                    ) {
+                        lastStartNode = newStartNode
+                        newStartNode
+                    } else {
+                        lastStartNode!!
+                    }
 
+                val endNode = GraphUtils.nearestNode(
+                    graphCoordinates,
+                    routeDestination!!,
+                    graph
+                )
+
+                val mainPath = AStar.findPath(
+                    graph,
+                    graphCoordinates,
+                    startNode,
+                    endNode
+                )
+
+                route = mainPath
+            }
         }
     }
 
 
     Box(modifier = Modifier.fillMaxSize()) {
 
-        // GOOGLE MAP
+        val mapStyleOptions = if (lightLevel < 10f) {
+            MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style_dark)
+        } else {
+            null
+        }
+
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
             properties = MapProperties(
-                isMyLocationEnabled = userLocation != null
+                isMyLocationEnabled = userLocation != null,
+                mapStyleOptions = mapStyleOptions
             ),
             uiSettings = MapUiSettings(
-                zoomControlsEnabled = false
+                zoomControlsEnabled = false,
+                myLocationButtonEnabled = false
             )
         ) {
 
-
-
-                // 🔶 Polígonos (SIEMPRE visibles)
                 campusData.polygons.forEach { polygonOptions ->
                     Polygon(
                         points = polygonOptions.points,
@@ -288,7 +351,7 @@ fun HomeMapScreen(navController: NavController) {
                         fillColor = Color(polygonOptions.fillColor)
                     )
                 }
-// 🔵 Cono de orientación del usuario (SIEMPRE visible)
+
             if (userLocation != null) {
 
                 val heading = orientation.azimuth
@@ -318,20 +381,7 @@ fun HomeMapScreen(navController: NavController) {
                     strokeColor = Color.Transparent
                 )
             }
-                // 🔵 Caminos (SOLO si showPaths = true)
-            if (showPaths && !isRouting) {
 
-                campusData.paths.forEach { polylineOptions ->
-
-                    Polyline(
-                        points = polylineOptions.points,
-                        width = polylineOptions.width,
-                        color = Color(polylineOptions.color)
-                    )
-                }
-            }
-
-                // 📍 POIs (controlados por botón Layers)
                 if (showPois && !isRouting) {
 
                     val poisToDraw = if (userLocation == null) {
@@ -361,40 +411,49 @@ fun HomeMapScreen(navController: NavController) {
                 userLocation != null &&
                 routeDestination != null
             ) {
-
-
-
+                val destinationState = rememberMarkerState(position = routeDestination!!)
                 Marker(
-                    state = MarkerState(position = routeDestination!!),
+                    state = destinationState,
                     title = "Destino"
                 )
 
-                if (routes.isNotEmpty()) {
+                if (route.isNotEmpty()) {
+                    val path = route
 
-                    val path = routes[selectedRouteIndex]
+                    // LÓGICA DE DIBUJADO DE CAMINOS REALES (PULIDA)
+                    val routePoints = buildList {
+                        for (i in 0 until path.size - 1) {
+                            val startNodeId = path[i]
+                            val endNodeId = path[i+1]
+                            
+                            // 1. Intentar dirección directa
+                            val curve = edgeGeometry[startNodeId to endNodeId]
+                                ?: edgeGeometry[endNodeId to startNodeId]?.reversed() // 2. Intentar dirección inversa
+                            
+                            if (curve != null) {
+                                if (isEmpty()) addAll(curve)
+                                else addAll(curve.drop(1)) // Evitar duplicar nodos intermedios
+                            } else {
+                                // 3. Fallback a línea recta si no hay curva en edge_geometry.json
+                                graphCoordinates[startNodeId]?.let { if (isEmpty()) add(it) }
+                                graphCoordinates[endNodeId]?.let { add(it) }
+                            }
+                        }
+                        // 4. Asegurar conexión exacta al POI de destino final
+                        if (isNotEmpty()) add(routeDestination!!)
+                    }
 
-                    val points = path.mapNotNull { graphCoordinates[it] }
-
-                    // sombra
+                    // Borde blanco para contraste
                     Polyline(
-                        points = points,
-                        width = 22f,
-                        color = Color.Black.copy(alpha = 0.25f),
-                        geodesic = true
-                    )
-
-                    // borde blanco
-                    Polyline(
-                        points = points,
-                        width = 18f,
+                        points = routePoints,
+                        width = 16f,
                         color = Color.White,
                         geodesic = true
                     )
-
-                    // linea azul
+                    // Línea azul de navegación
                     Polyline(
-                        points = points,
-                        width = 12f,
+                        points = routePoints,
+                        width = 10f,
                         color = Color(0xFF1E88E5),
                         geodesic = true
                     )
@@ -430,19 +489,6 @@ fun HomeMapScreen(navController: NavController) {
 
                         IconButton(
                             onClick = {
-                                if (routes.isNotEmpty()) {
-                                    selectedRouteIndex = (selectedRouteIndex + 1) % routes.size
-                                }
-                            }
-                        ) {
-                            Icon(
-                                Icons.Default.AltRoute,
-                                contentDescription = "Ruta alternativa"
-                            )
-                        }
-
-                        IconButton(
-                            onClick = {
                                 isRouting = false
                                 routeDestination = null
                                 routingDestinationName = null
@@ -455,15 +501,13 @@ fun HomeMapScreen(navController: NavController) {
             }
         }
 
-        // FAB PRINCIPAL (Menu)
         Column(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(end = 16.dp, top = 16.dp), // ← ahora sí pegado arriba
+                .padding(end = 16.dp, top = 16.dp),
             horizontalAlignment = Alignment.End
         ) {
 
-            // 🔝 LAYERS SIEMPRE ARRIBA
             FloatingActionButton(
                 onClick = { showMenu = !showMenu },
                 containerColor = PrimaryOrange
@@ -511,9 +555,9 @@ fun HomeMapScreen(navController: NavController) {
                                 cameraPositionState.animate(
                                     CameraUpdateFactory.newCameraPosition(
                                         CameraPosition(
-                                            location,              // centro = usuario
-                                            18f,                   // zoom cercano
-                                            current.tilt,          // mantener tilt
+                                            location,
+                                            18f,
+                                            current.tilt,
                                             0f
                                         )
                                     )
@@ -534,11 +578,6 @@ fun HomeMapScreen(navController: NavController) {
                             }
                         }
                     }
-                    SmallFab(Icons.Default.Share) {
-
-                        showMenu = false
-                        showShareDialog = true
-                    }
                     SmallFab(
                         icon = Icons.Default.Layers,
                         onClick = { showPois = !showPois },
@@ -554,7 +593,6 @@ fun HomeMapScreen(navController: NavController) {
             }
         }
 
-        // BOTÓN INFERIOR
         Button(
             onClick = { showSheet = true },
             modifier = Modifier
@@ -570,14 +608,6 @@ fun HomeMapScreen(navController: NavController) {
             Text("¿A dónde quieres ir?")
         }
     }
-    if (showShareDialog) {
-
-        ShareLocationDialog(
-            destination = routeDestination,
-            onDismiss = { showShareDialog = false }
-        )
-    }
-    // BOTTOM SHEET
     if (showSheet) {
         ModalBottomSheet(
             onDismissRequest = { showSheet = false },
@@ -596,20 +626,40 @@ fun HomeMapScreen(navController: NavController) {
                     }
                 },
                 onRouteClick = { poi ->
-
-                    campusBounds?.let { bounds ->
-
-                        routeDestination = poi.second
-                        routingDestinationName = poi.first
-                        isRouting = true
-                        showSheet = false
-                    }
+                    routeDestination = poi.second
+                    routingDestinationName = poi.first
+                    isRouting = true
+                    showSheet = false
+                },
+                onNavigateToFood = {
+                    showSheet = false
+                    navController.navigate(AppScreens.FoodMenu.name)
+                },
+                onNavigateToEvents = {
+                    showSheet = false
+                    navController.navigate(AppScreens.Events.name)
+                },
+                onNavigateToOpportunities = {
+                    showSheet = false
+                    navController.navigate(AppScreens.Opportunities.name)
+                },
+                onNavigateToSchedule = {
+                    showSheet = false
+                    navController.navigate(AppScreens.MySchedule.name)
+                },
+                onNavigateToShop = {
+                    showSheet = false
+                    navController.navigate(AppScreens.VirtualShop.name)
+                },
+                onNavigateToCarnet = {
+                    showSheet = false
+                    navController.navigate(AppScreens.UserCarnet.name)
+                },
+                onNavigateToStats = {
+                    showSheet = false
+                    navController.navigate(AppScreens.AcademicStats.name)
                 }
             )
-
-
-
-
         }
     }
     if (selectedPoi != null) {
@@ -620,16 +670,10 @@ fun HomeMapScreen(navController: NavController) {
                 buildingName = selectedPoi!!.first,
                 onClose = { selectedPoi = null },
                 onStartRoute = {
-
-                    campusBounds?.let { bounds ->
-
-
-
-                        routeDestination = selectedPoi!!.second
-                        routingDestinationName = selectedPoi!!.first
-                        isRouting = true
-                        selectedPoi = null
-                    }
+                    routeDestination = selectedPoi!!.second
+                    routingDestinationName = selectedPoi!!.first
+                    isRouting = true
+                    selectedPoi = null
                 }
             )
         }

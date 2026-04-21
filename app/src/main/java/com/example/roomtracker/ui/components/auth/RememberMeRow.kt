@@ -9,25 +9,14 @@ import com.example.roomtracker.ui.theme.PrimaryOrange
 
 @Composable
 fun RememberMeRow(
-    rememberMe: Boolean,
-    onRememberChange: (Boolean) -> Unit,
     onForgotPasswordClick: () -> Unit
 ) {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
-        Checkbox(
-            checked = rememberMe,
-            onCheckedChange = onRememberChange
-        )
-
-        Text(
-            text = "Mantener sesión iniciada",
-            modifier = Modifier.weight(1f)
-        )
 
         TextButton(onClick = onForgotPasswordClick) {
             Text(

@@ -26,10 +26,16 @@ class SensorRepository(context: Context) : SensorEventListener {
     private val rotationVector =
         sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
 
+    private val lightSensor =
+        sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+
     private val _orientation =
         MutableStateFlow(OrientationData(0f,0f,0f))
 
     val orientation: StateFlow<OrientationData> = _orientation
+
+    private val _lightLevel = MutableStateFlow(0f)
+    val lightLevel: StateFlow<Float> = _lightLevel
 
     fun start() {
 
@@ -62,6 +68,14 @@ class SensorRepository(context: Context) : SensorEventListener {
                 this,
                 it,
                 SensorManager.SENSOR_DELAY_GAME
+            )
+        }
+
+        lightSensor?.also {
+            sensorManager.registerListener(
+                this,
+                it,
+                SensorManager.SENSOR_DELAY_NORMAL
             )
         }
     }
@@ -98,6 +112,8 @@ class SensorRepository(context: Context) : SensorEventListener {
 
             _orientation.value =
                 OrientationData(azimuth,pitch,roll)
+        } else if (event?.sensor?.type == Sensor.TYPE_LIGHT) {
+            _lightLevel.value = event.values[0]
         }
     }
 

@@ -6,36 +6,40 @@ import kotlin.math.*
 object GraphUtils {
 
     /**
-     * Encuentra el nodo más cercano que tenga conexiones
+     * Encuentra el nodo más cercano considerando también la dirección al destino.
+     * Si no se pasa destino, usa solo distancia euclidiana.
      */
     fun nearestNode(
         nodes: Map<String, LatLng>,
         point: LatLng,
-        graph: Graph
+        graph: Graph,
+        destination: LatLng? = null
     ): String {
 
-        var closestNode: String? = null
-        var minDistance = Double.MAX_VALUE
-
-        for ((nodeId, nodeLocation) in nodes) {
-
-            val neighbors = graph[nodeId]
-
-            // ignorar nodos sin edges
-            if (neighbors.isNullOrEmpty()) continue
-
-            val distance = distanceMeters(
-                nodeLocation,
-                point
-            )
-
-            if (distance < minDistance) {
-                minDistance = distance
-                closestNode = nodeId
+        // Candidatos con conexiones, ordenados por distancia al punto
+        val candidates = nodes
+            .filter { (nodeId, _) -> !graph[nodeId].isNullOrEmpty() }
+            .map { (nodeId, nodeLocation) ->
+                nodeId to distanceMeters(nodeLocation, point)
             }
-        }
+            .sortedBy { it.second }
+            .take(8)
 
-        return closestNode ?: nodes.keys.first()
+        if (candidates.isEmpty()) return nodes.keys.first()
+
+        // Si no hay destino, devolver el más cercano
+        if (destination == null) return candidates.first().first
+
+        // Con destino: elegir el candidato con menor (distancia_al_punto + distancia_al_destino).
+        // El peso 0.5 sobre distToDest descarta nodos que están "detrás" del usuario respecto
+        // al destino sin sacrificar la prioridad de cercanía al punto de snap.
+        // (0.3 era demasiado débil: un nodo a 5 m al oeste ganaba sobre uno a 20 m al este
+        //  aunque el destino estuviera 150 m más a la derecha del nodo oeste.)
+        return candidates.minByOrNull { (nodeId, distToPoint) ->
+            val nodeLocation = nodes[nodeId]!!
+            val distToDest = distanceMeters(nodeLocation, destination)
+            distToPoint + distToDest * 0.5
+        }?.first ?: candidates.first().first
     }
 
     /**

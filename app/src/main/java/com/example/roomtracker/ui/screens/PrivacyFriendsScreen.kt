@@ -32,7 +32,8 @@ data class FriendAccess(
 )
 @Composable
 fun PrivacyFriendsScreen(
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onOpenRequests: () -> Unit
 ) {
 
     var friends by remember {
@@ -57,7 +58,16 @@ fun PrivacyFriendsScreen(
         // HEADER
         ScreenHeader(
             title = "Privacidad y Amigos",
-            onBack = onBack
+            onBack = onBack,
+            action = {
+                IconButton(onClick = onOpenRequests) {
+                    Icon(
+                        imageVector = Icons.Default.Inbox,
+                        contentDescription = "Solicitudes",
+                        tint = DarkText
+                    )
+                }
+            }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
