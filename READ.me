@@ -1,0 +1,236 @@
+# Documento de Especificacion Tecnica y Arquitectura del Sistema - RoomTracker
+
+Este documento proporciona una descripcion formal, jerarquica y unificada de la arquitectura, componentes de software, capas de datos, vistas y servicios del sistema de informacion RoomTracker, basado en la totalidad del codigo fuente suministrado.
+
+---
+
+## 1. Arquitectura General del Sistema
+
+El sistema RoomTracker esta desarrollado de forma nativa para la plataforma Android utilizando el lenguaje Kotlin. Su diseno sigue los principios de Clean Architecture y la implementacion estricta del patron arquitectonico Model-View-ViewModel (MVVM) en combinacion con flujos de datos unidireccionales reactivos (UDF).
+
+La capa de presentacion esta desacoplada de la logica de negocio mediante el uso de componentes declarativos en Jetpack Compose, los ViewModels administran los estados a traves de StateFlow, y los repositorios encapsulan las llamadas asincronas (suspend funciones) hacia los servicios de hardware locales y el proveedor de Backend-as-a-Service (BaaS) Supabase.
+
+---
+
+## 2. Modulos Core e Implementacion Estructural
+
+### 2.1. Servicios del Sistema en Segundo Plano (Services)
+
+El sistema delega las tareas criticas de persistencia posicional, georreferenciacion y mensajeria asincrona a componentes de tipo Service de Android, garantizando la ejecucion por fuera del ciclo de vida de la interfaz de usuario:
+
+* LocationForegroundService: Servicio de primer plano diseñado para mantener activa la antena GPS de alta precision de manera ininterrumpida. Utiliza un hilo de ejecucion dedicado independiente del bucle principal de la UI para procesar las llamadas de FusedLocationProviderClient sin penalizar el rendimiento visual. Ante una destruccion del proceso, el metodo onTaskRemoved planifica un reinicio automatico mediante AlarmManager empleando el flag ELAPSED_REALTIME_WAKEUP con un delta de 2000 milisegundos. Tambien invoca de forma autonoma rutinas de restauracion de sesion sobre SharedPrefsSessionManager para importar de manera persistente las credenciales JWT ante caidas de red o reinicios de hardware.
+* FCMService: Implementacion de FirebaseMessagingService encargada de gestionar el ciclo de vida de los tokens de notificaciones push de Google. Captura la generacion de identificadores mediante onNewToken e intercepta payloads en primer plano a traves de onMessageReceived. Construye notificaciones mediante NotificationCompat.Builder asignando prioridades altas e inyectando un objeto PendingIntent que encapsula parametros extras de enrutamiento hacia la actividad MainActivity.
+
+### 2.2. Ecosistema de Interfaz Grafica (ui/)
+
+La capa visual de presentacion se encuentra estructurada sobre componentes reutilizables declarativos basados en Jetpack Compose, organizados bajo una jerarquia de componentes atómicos y pantallas complejas (Screens):
+
+* Modulo de Autenticacion y Registro (components/auth y screens/):
+* LoginScreen: Orquestador de acceso que integra componentes como LoginHeader, EmailField, PasswordField y CampusField (un dropdown interactivo basado en ExposedDropdownMenuBox para cambiar reactivamente de sede universitaria).
+* RegisterScreen, VerificationScreen y RegisterSuccessScreen: Ciclo completo de onboarding. Emplea la interfaz de entrada de 6 dígitos numéricos independientes con foco asíncrono automatizado (VerificationCodeInput) y listeners de teclado optimizados para tokens OTP de validacion de cuentas.
+* ForgotPasswordScreen y ForgotPasswordSentScreen: Flujo completo de recuperacion de contraseña autogestionado.
+* Proteccion de Consolas de Operador: Al ingresar bajo el rol de Operador, Navigation.kt ancla la pantalla mediante un interceptor BackHandler anulando el boton nativo de Atras del dispositivo para resguardar la sesion activa de atencion.
+
+
+* Componentes de Navegacion y Mapas Peatonal (components/map y screens/):
+* HomeMapScreen: Pantalla principal del mapa interactivo implementada con el SDK de Google Maps para Compose. Renderiza capas topologicas complejas, poligonos de bloques, marcadores de amigos en tiempo real y traza polilíneas geográficas dinámicas en respuesta al motor de enrutamiento.
+* BottomSheetContent: Hoja expandible inferior que unifica la barra de busqueda rapida del campus (SearchField), listas filtradas mediante LazyColumn y accesos directos a los servicios de la aplicacion.
+* BuildingDetailSheet y FloorDetail: Componente inmersivo de infraestructura que despliega imagenes asincronas via Coil, descripciones completas y un desglose jerarquico expandible de la distribucion interna de los edificios, clasificando cromaticamente los salones segun su tipo (espacioColor).
+* AccesoPicker: Panel modal interactivo que procesa listas de puntos de interes (List MapPoi) agrupados por proximidad para resolver la ambiguedad de destinos, permitiendo al usuario elegir de forma explicita a que entrada de un edificio desea dirigirse.
+* ShareLocationDialog: Cuadro de dialogo modal que genera URLs de georreferenciacion estandarizadas permitiendo la copia directa de coordenadas al portapapeles nativo del dispositivo.
+* SmallFab: Componente de boton flotante atomico parametrizado para acciones espaciales de la interfaz del mapa.
+
+
+* Identificacion, Seguridad e Inspeccion QR (screens/):
+* UserCarnetScreen: Renderiza el Carnet Digital Universitario del estudiante utilizando un diseno de tarjeta de alta fidelidad con gradientes visuales. Incluye visualizacion de foto de perfil remota, fecha de vigencia dinamica, un generador automatizado de codigos de barras decorativos minimalistas (BarcodeVisual) y la inyeccion segura de cadenas QR institucionales codificadas.
+* QrScannerScreen: Modulo de escaneo de credenciales en tiempo real construido sobre CameraX (ProcessCameraProvider) y optimizado con analisis de imagenes acoplado. Cuenta con un overlay de Canvas personalizado que dibuja una ventana de escaneo con esquinas redondeadas y animaciones de linea de escaneo laser interactivas. Valida de forma estricta payloads con formato delimitado JAVERIANA, codigo, uuid, nombre, facultad.
+
+
+* Privacidad, Telemetria y Bienestar Peatonal (screens/):
+* UniversityStatsScreen: Tablero de control de bienestar fisico alimentado por el podometro. Despliega de forma cronologica el conteo de pasos diarios (DiaStats), barras indicadoras de metas e historicos semanales con formateadores dinamicos de metros a kilometros peatonales.
+* PrivacyFriendsScreen y LocationRequestsScreen: Centro de control de privacidad social. Permite gestionar listas de amigos y solicitudes entrantes (en estado pendiente), ademas de conmutar en tiempo real los permisos de visibilidad geografica mutua (puede_ver_1 / puede_ver_2) mediante botones reactivos de estado (Visibility / VisibilityOff).
+
+
+* Ecosistema Academico, Horarios y Contenidos Universitarios (screens/):
+* ScheduleScreen: Agenda interactiva semanal estructurada que permite a los estudiantes visualizar, anadir, editar y remover horarios de asignaturas (ScheduleTask). Discrimina visualmente las materias por colores personalizados y anade accesos directos si cuentan con enlaces virtuales o georreferenciacion de aulas. El estado de la barra de estado del sistema se sincroniza dinamicamente con WindowCompat para garantizar una experiencia inmersiva.
+* AcademicStatsScreen: Panel de control academico configurado con pestanas e historicos de promedios. Dispone de tarjetas editables in-situ (EditableCourseCard) para simular, anadir o remover materias de forma reactiva, recalculando en tiempo real las metricas del periodo.
+* ChatScreen y MessagesScreen: Interfaz conversacional asincrona para estudiantes. Integra burbujas de texto reactivas, estados de lectura (unread) e inyeccion de multimedia mediante Launchers nativos que capturan imagenes de galeria o camara a traves de un FileProvider seguro.
+* OperadorHomeScreen: Consola dedicada para el personal de soporte tecnico, psicologia y alimentacion. Muestra una lista ordenada cronologicamente de hilos activos de estudiantes con previsualizacion del ultimo mensaje enviado (lastMessage).
+* ForoScreen: Tablon de discusion comunitario publico en tiempo real filtrado nativamente por la universidad del usuario actual, limitado a los ultimos 100 mensajes cronologicos.
+* FoodMenuScreen, VirtualShopScreen y OpportunitiesScreen: Pantallas de marketplace y carteleras informativas. Despliegan menus de cafeterias con desglose calorico, listados de oportunidades laborales/academicas y tiendas de merchandising de la institucion con selectores dinamicos de tallas. Los componentes enlazan de forma nativa sus ubicaciones geograficas a identificadores de nodos topologicos (id_nodo) del mapa para permitir la navegacion guiada inmediata.
+* SettingsScreen: Panel centralizado de configuracion de perfil de usuario que orquestador la navegacion hacia los modulos de pasos, carnetizacion, solicitudes y cierre explicito de sesion.
+
+
+
+### 2.3. Capa Grafica de Estilos y Temas (ui/theme/)
+
+El diseño de la interfaz grafica de la aplicacion implementa el sistema de diseño Material Design 3 mediante una abstraccion limpia de tokens de color y estilos de texto:
+
+* Color.kt: Modulo que define los valores hexadecimales estáticos para las paletas primarias, secundarias y complementarias del sistema. Contiene constantes criticas como PrimaryOrange, BackgroundGray, DarkText y LightText utilizadas transversalmente por los modulos de UI de mapas, carnetizacion y foros institucionales.
+* Type.kt: Instancia el objeto Typography de Material 3, configurando las familias de fuentes por defecto y los objetos TextStyle parametrizados con dimensiones en unidades sp, espaciados de letras y altos de linea normalizados.
+* Theme.kt: Expone el componente composable de envoltura global RoomTrackerTheme. Este metodo gestiona dinamica y reactivamente el cambio entre interfaces a traves del booleano isSystemInDarkTheme(). En dispositivos con Android 12 o superior (API de nivel S), inyecta los metodos de colores dinamicos del sistema operativo dynamicDarkColorScheme y dynamicLightColorScheme a partir del contexto actual proporcionado por LocalContext.current.
+
+### 2.4. Motor de Geolocalizacion y Mapas Peatonal
+
+* Enrutamiento Avanzado (A*): Algoritmo de caminos optimos que procesa la distancia de Haversine sobre polilineas de tramos reales (LineString) como heuristica admisible para evitar saltos lineales imposibles sobre edificios. Los costos del grafo usan la distancia real de caminata a lo largo de los senderos y la heurística representa la distancia en línea recta, garantizando un resultado óptimo.
+* Caminos Alternativos (K-Shortest Paths): Motor de enrutamiento secundario que anade penalizaciones extremas a las aristas previamente transitadas en la iteracion anterior, multiplicando su costo original al menos por 3 o aplicando una penalización base de 200 metros, obligando al algoritmo a descubrir alternativas de paso reales por el campus.
+* Snap-to-Graph Inteligente: Ajuste automatizado de la ubicacion GPS actual al nodo de red mas cercano. Aplica un factor de ponderación distributiva del 0.5 hacia las coordenadas finales para descartar nodos que están detrás del usuario respecto al destino final, evitando desvíos contraintuitivos en la trayectoria.
+* Utilidades del Mapa (MapUtils): Contiene algoritmos de georreferenciación pura utilizando Location.distanceBetween para calculos de precision metrica en el mapa y un generador reactivo de ubicaciones aleatorias dentro de limites geograficos acotados (LatLngBounds).
+
+### 2.5. Telemetria de Hardware e Integracion de Sensores
+
+* Orientacion Espacial Avanzada: Vinculado al hilo de alta tasa de refresco para videojuegos (SENSOR_DELAY_GAME), procesa el vector de rotacion de hardware (TYPE_ROTATION_VECTOR) convirtiendo matrices trigonometricas en angulos de inclinación puros (Azimuth, Pitch, Roll) indispensables para el funcionamiento correcto de brújulas peatonales.
+* Adaptabilidad Luminica: Consume lecturas de Luxes mediante el sensor TYPE_LIGHT expuestas en flujos asincronos para ajustar reactivamente la visualizacion de la UI según las condiciones lumínicas del entorno.
+* Podómetro Inteligente de Doble Capa: PedometerViewModel combina el sensor de conteo de pasos fisicos (TYPE_STEP_DETECTOR) con un tracking de proximidad GPS (FusedLocationProviderClient) parametrizado para coordenadas de campus. Calcula la distancia recorrida multiplicando pasos por un factor estandar de caminata (0.75 m/paso) y guarda historiales de 30 dias cronológicos en un archivo JSON dentro del bucket remoto distancias.
+
+### 2.6. Ciclo de Vida Estudiantil y Agenda Local
+
+* Persistencia Local con DataStore: El modulo ScheduleViewModel implementa un almacenamiento clave-valor asincrono y seguro mediante preferencesDataStore para la agenda semanal del estudiante (ScheduleTask), asegurando la persistencia de tareas y horarios en local de forma independiente al estado de la red.
+* Recalculo Ponderado Consistente: Al alterar calificaciones, el sistema invoca funciones de extension funcionales dentro de AcademicModels.kt que recalculan promedios acumulados ponderados por creditos, calculan los puntos de avance acumulados e clasifican el ciclo con mayor rendimiento academico de forma atomica antes de sincronizar con el Storage remoto.
+
+---
+
+## 3. Estructura Completa del Proyecto
+
+com.example.roomtracker/
+│
+├── map/                              # Core de Geometria y Algoritmia Topologica
+│   ├── AStar.kt                      # Busqueda de Rutas Optimas con Heurística Haversine
+│   ├── KShortestPaths.kt             # Penalizacion de aristas iterativas para trayectorias alternativas
+│   ├── GraphUtils.kt                 # Distancias metricas y Snap-to-Graph ponderado al destino
+│   ├── GraphLoader.kt                # Lector local del JSON de topología física
+│   ├── CampusLayer.kt                # Renderizado de polígonos de bloques, senderos y POIs
+│   └── EdificioDetalle.kt            # Modelado de espacios internos: Edificio -> Pisos -> Aulas
+│
+├── data/                             # Capa de Datos (Persistencia e Infraestructura)
+│   ├── repository/
+│   │   ├── AuthRepository.kt         # Flujos de sesion, Registro OTP y Sincronizacion de Archivos
+│   │   ├── LocationRepository.kt     # Actualizaciones GPS (Upsert Relacional) y Estados de Privacidad
+│   │   ├── SensorRepository.kt       # Listener del ciclo de sensores fisicos (Vectores de Rotacion, Luz)
+│   │   ├── PedometerRepository.kt    # Carga de historicos serializados de podometro a Storage
+│   │   ├── AcademicRepository.kt     # Consultas de carnetización y lectura de historiales JSON de notas
+│   │   ├── ChatRepository.kt         # Transmision de mensajes e inyeccion de multimedia en Buckets
+│   │   ├── OperadorRepository.kt     # Mapeo de hilos de atencion para consolas de soporte
+│   │   ├── ContentRepository.kt      # Repositorio de eventos, marketplace y menus caloricos
+│   │   ├── ForoRepository.kt         # Canal del tablon de mensajes publicos de la institucion
+│   │   └── FriendsRepository.kt      # Gestion relacional de amistades y busquedas de usuarios
+│
+├── viewmodel/                        # Capa de Presentacion (Logica de UI Embestida en MVVM)
+│   ├── AuthViewModel.kt              # Estado de accesos, recuperacion y login institucional
+│   ├── LocationViewModel.kt          # Reactividad posicional de mapas y tracking seguro de amigos
+│   ├── SensorViewModel.kt            # Orquestador de lecturas de hardware de orientación y luminosidad
+│   ├── PedometerViewModel.kt         # Logica del podometro, tracking sincrono GPS y persistencia remota
+│   ├── ScheduleViewModel.kt          # Control y persistencia local en DataStore de la agenda estudiantil
+│   ├── AcademicStatsViewModel.kt     # Orquestador del recalculo de notas y guardado consistente
+│   ├── CarnetViewModel.kt            # Estado de renderizado del Carnet Digital y QR corporativo
+│   ├── ChatViewModel.kt              # Gestor del chat del canal del estudiante y subida de multimedia
+│   ├── OperadorViewModel.kt          # Bandeja de entrada sincrona para personal de soporte tecnico y psicologia
+│   ├── ForoViewModel.kt              # Publicacion reactiva limitada a hilos institucionales
+│   ├── FriendsViewModel.kt           # Manejador del flujo de solicitudes de amistad (Enviadas/Recibidas)
+│   ├── EventsViewModel.kt            # Estado de actualizacion de la cartelera universitaria
+│   ├── OpportunitiesViewModel.kt     # Control y despliegue de ofertas academicas/laborales
+│   ├── FoodViewModel.kt              # Catalogo interactivo de menus y locales de alimentacion
+│   └── ShopViewModel.kt              # Gestion de productos y recordatorios de la tienda universitaria
+│
+├── service/                          # Componentes del Sistema en Segundo Plano
+│   ├── LocationForegroundService.kt  # Servicio de tracking geografico persistente e ininterrumpido
+│   └── FCMService.kt                 # Receptor e interprete de notificaciones push de Firebase
+│
+├── ui/                               # Capa Grafica Reutilizable y Pantallas (Jetpack Compose)
+│   ├── components/
+│   │   ├── auth/
+│   │   │   ├── CampusField.kt        # Dropdown de seleccion de instituciones
+│   │   │   ├── EmailField.kt         # Campo formateado para correos electronicos
+│   │   │   ├── UsernameField.kt      # Campo de entrada para nombre completo de usuario
+│   │   │   ├── PasswordField.kt      # Campo de seguridad para contraseñas
+│   │   │   ├── RememberMeRow.kt      # Fila interactiva para olvido de contraseña
+│   │   │   ├── verificationCodeInput.kt # Inputs numericos aislados para tokens OTP
+│   │   │   ├── LoginHeader.kt        # Titulo y subtitulo de inicio de sesion
+│   │   │   ├── LoginButtons.kt       # Botonera de accesos directos
+│   │   │   └── BackButton.kt         # Control de retorno atomico superior
+│   │   ├── common/
+│   │   │   ├── ScreenHeader.kt       # Toolbar generica interactiva con slots para acciones
+│   │   │   └── SearchField.kt        # Buscador unificado con icono de lupa incorporado
+│   │   └── map/
+│   │       ├── AccesoPicker.kt       # Selector modal interactivo de entradas de edificios
+│   │       ├── ShareLocationDialog.kt# Dialogo generador de URLs para compartir ubicaciones
+│   │       ├── SmallFab.kt           # Boton flotante miniatura para mapas
+│   │       ├── BottomSheetContent.kt # Hoja de ruta inferior con busqueda y servicios
+│   │       ├── BuildingDetailSheet.kt# Ficha inmersiva de detalles y espacios por piso
+│   │       └── FloorDetail.kt        # Componente de desglose expandible de servicios de piso
+│   ├── theme/
+│   │   ├── Color.kt                  # Definicion de tokens de colores cromaticos estaticos
+│   │   ├── Type.kt                   # Configuracion de familias de fuentes y tipografias
+│   │   └── Theme.kt                  # Manejador reactivo de Dark Mode y Material 3
+│   └── screens/
+│       ├── LoginScreen.kt            # Pantalla de acceso e inicio de sesion unificado
+│       ├── RegisterScreen.kt         # Pantalla de creacion de cuentas estudiantiles
+│       ├── VerificationScreen.kt     # Pantalla de veroficacion e ingreso de codigo OTP
+│       ├── RegisterSuccessScreen.kt  # Pantalla de confirmacion de cuenta lista
+│       ├── ForgotPasswordScreen.kt   # Pantalla de solicitud de cambio de clave por email
+│       ├── ForgotPasswordSentScreen.kt# Pantalla de ingreso de token OTP y reconfiguracion de clave
+│       ├── HomeMapScreen.kt          # Pantalla core del mapa interactivo y navegacion GPS
+│       ├── UserCarnetScreen.kt       # Pantalla de visualizacion del Carnet Digital Universitario
+│       ├── QrScannerScreen.kt        # Escaner de CameraX para validacion de codigos QR institucionales
+│       ├── UniversityStatsScreen.kt  # Tablero de control de pasos y distancia de podometro
+│       ├── PrivacyFriendsScreen.kt   # Pantalla de configuracion de privacidad de geolocalizacion
+│       ├── LocationRequestsScreen.kt # Panel de solicitudes de amistad entrantes y pendientes
+│       ├── ChatScreen.kt             # Interfaz de mensajeria con soporte multimedia y camara
+│       ├── MessagesScreen.kt         # Bandeja de entrada de hilos de atencion estudiantil
+│       ├── OperadorHomeScreen.kt     # Consola de administracion para operadores de soporte
+│       ├── ForoScreen.kt             # Tablon comunitario de comunication libre institucional
+│       ├── AcademicStatsScreen.kt    # Vista de promedios, notas e historial academico
+│       ├── ScheduleScreen.kt         # Agenda y horarios interactivos semanales (DataStore)
+│       ├── FoodMenuScreen.kt         # Menu interactivo de locales y cafeterias de alimentacion
+│       ├── OpportunitiesScreen.kt    # Cartelera de ofertas de empleo y practicas profesionales
+│       ├── VirtualShopScreen.kt      # Catalogo de productos y merchandising de la universidad
+│       └── SettingsScreen.kt         # Panel de configuraciones generales y salida de sesion
+│
+├── utils/                            # Utilidades Globales del Dominio
+│   └── MapUtils.kt                   # Distancia real mediante Location Services y Randomizacion de coordenadas
+│
+├── SharedPrefsSessionManager.kt      # Serializador local en disco de tokens JWT de Supabase
+│
+└── model/                            # Data Transfer Objects (Serializables con Kotlinx)
+├── AcademicModels.kt             # Esquemas JSON de calificaciones, calendarios y carnetización
+├── UserModels.kt                 # Entidades para mapear perfiles de Supabase (UsuarioRow)
+└── ...                           # Modelos logicos complementarios del dominio
+
+---
+
+## 4. Infraestructura de Backend en Supabase
+
+Los repositorios y servicios del cliente interactuan dinamicamente con los servicios en la nube de la plataforma Supabase mediante una unica instancia global estatica lazily inicializada (val supabase). Esta configuracion acopla un motor HTTP basado en OkHttp parametrizando tiempos limites de conexion, lectura y escritura fijos en 60 segundos con soporte de reintento de conexion activo ante fallas de red. El ciclo inyecta un gestor personalizado SharedPrefsSessionManager vinculado al contexto global de la aplicacion para automatizar el almacenamiento en disco de tokens JWT, asegurando accesos unificados.
+
+La integracion de la base de datos distribuida se desglosa en los siguientes modulos relacionales y de objetos binarios:
+
+* Postgrest (Bases de Datos Relacionales):
+* usuarios: Almacena perfiles de usuario, roles y el campo fcm_token. El modulo RoomTrackerApp y el FCMService sincronizan asincronamente el identificador mediante llamadas de actualizacion filtradas por el identificador unico de usuario (id_usuario).
+* ubicacion_usuario: Modulo espacial. Recibe actualizaciones de georreferenciacion en tiempo real generadas por el hilo secundario de LocationForegroundService mediante instrucciones upsert, resolviendo colisiones a traves de la clausula de conflicto sobre la llave primaria id_usuario.
+* amistad: Matriz relacional indexada con flags booleanos de visualizacion reciproca (puede_ver_1 / puede_ver_2).
+* chat, mensaje y foro_mensaje: Tablas relacionales para la inyeccion de textos estructurados cronologicamente.
+
+
+* Storage Buckets (Almacenamiento de Ficheros JSON/Binarios):
+* mapas/: Arboles topologicos segmentados por organizacion (/carpeta_mapas/graph.json).
+* notas/: Historiales academicos completos aislados en JSON para optimizar consultas SQL masivas.
+* distancias/: Persistencia binaria de estadisticas diarias de podometros (DiaStats).
+* chat-media/: Almacenamiento optimizado para imagenes enviadas en tiempo real por el canal de soporte.
+
+
+
+---
+
+## 5. Pipeline de Configuracion Tecnica y Flujos
+
+### 5.1. Inicialización y Gestión de Ciclos
+
+Al arrancar, MainActivity coordina el flujo de inicializacion de la aplicacion invocando installSplashScreen antes de instanciar la interfaz. Evalua y solicita permisos de alertas de forma dinamica mediante requestNotificationPermission en plataformas API 33 o superiores. En paralelo, la clase RoomTrackerApp configura el canal de alertas global de alta prioridad asignando IMPORTANCE_HIGH e inicia de forma inmediata la sincronizacion reactiva de tokens push mediante syncFCMToken consumiendo las funciones de suspension expuestas por la API de Supabase.
+
+Flujo Secuencial:
+
+1. MainActivity ejecuta installSplashScreen y solicita permisos POST_NOTIFICATIONS.
+2. RoomTrackerApp inicializa el contexto estático y crea el canal de notificaciones prioritario.
+3. Se invoca syncFCMToken recuperando el identificador único desde Firebase Cloud Messaging.
+4. Si existe una sesión de Supabase persistida por SharedPrefsSessionManager, se realiza un update asíncrono sobre la tabla usuarios inyectando el token asociado al id_usuario actual.
+5. Tras un inicio de sesión exitoso en AuthViewModel, se valida la institución educativa del estudiante y se descarga secuencialmente la cartografía topológica institucional desde Supabase Storage, inicializando el Grafo mediante GraphLoader en el espacio privado local.
