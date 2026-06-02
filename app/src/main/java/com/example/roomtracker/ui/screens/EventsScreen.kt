@@ -17,43 +17,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.roomtracker.ui.components.common.ScreenHeader
 import com.example.roomtracker.ui.theme.BackgroundGray
 import com.example.roomtracker.ui.theme.DarkText
 import com.example.roomtracker.ui.theme.LightText
 import com.example.roomtracker.ui.theme.PrimaryOrange
-import com.google.android.gms.maps.model.LatLng
-
-data class CampusEvent(
-    val title: String,
-    val category: String,
-    val date: String,
-    val time: String,
-    val location: String,
-    val description: String,
-    val link: String? = null,
-    val poiLocation: LatLng? = null
-)
+import com.example.roomtracker.model.EventoJson
+import com.example.roomtracker.viewmodel.EventsViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventsScreen(
     onBack: () -> Unit,
-    onStartRoute: (LatLng, String) -> Unit = { _, _ -> }
+    // nodeId del mapa + nombre del lugar; solo se llama si el evento tiene id_nodo
+    onStartRoute: (nodeId: String, name: String) -> Unit = { _, _ -> },
+    viewModel: EventsViewModel
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
     var selectedFilter by remember { mutableStateOf("Todos") }
-    val filters = listOf("Todos", "Tutorias", "Conciertos", "Clases", "Juegos")
-
-    val events = listOf(
-        CampusEvent("Clasificación Fútbol", "Juegos", "Hoy", "2:00 PM", "Cancha de Fútbol", "Clasificatorios internos", "https://forms.gle/javeriana-futbol", LatLng(4.628, -74.064)),
-        CampusEvent("Concierto Filarmónica", "Conciertos", "Mañana", "6:00 PM", "Auditorio Felix Restrepo", "Música clásica en vivo", "https://bit.ly/concierto-jav", LatLng(4.627, -74.065)),
-        CampusEvent("Monitoría Cálculo I", "Tutorias", "25 Ene", "9:00 AM", "Edificio 67 - Sala 402", "Dudas sobre derivadas", null, LatLng(4.629, -74.063)),
-        CampusEvent("Taller de Dibujo", "Clases", "26 Ene", "11:00 AM", "Centro Cultural", "Traer carboncillo", "https://bit.ly/taller-arte", LatLng(4.626, -74.066))
-    )
-
-    val filteredEvents = if (selectedFilter == "Todos") events else events.filter { it.category == selectedFilter }
 
     Column(
         modifier = Modifier
@@ -63,138 +50,236 @@ fun EventsScreen(
     ) {
         Spacer(modifier = Modifier.height(40.dp))
         ScreenHeader(title = "Eventos y Noticias", onBack = onBack)
-
         Spacer(modifier = Modifier.height(20.dp))
 
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            items(filters) { filter ->
-                FilterChip(
-                    selected = selectedFilter == filter,
-                    onClick = { selectedFilter = filter },
-                    label = { Text(filter) },
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = PrimaryOrange,
-                        selectedLabelColor = Color.White,
-                        labelColor = LightText
-                    )
-                )
+        when (val s = state) {
+
+            is EventsViewModel.EventsState.Loading -> {
+                Box(Modifier.fillMaxSize(), Alignment.Center) {
+                    CircularProgressIndicator(color = PrimaryOrange)
+                }
             }
-        }
 
-        Spacer(modifier = Modifier.height(20.dp))
+            is EventsViewModel.EventsState.Error -> {
+                Box(Modifier.fillMaxSize(), Alignment.Center) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(Icons.Default.ErrorOutline, null,
+                            tint = Color.Gray, modifier = Modifier.size(48.dp))
+                        Spacer(Modifier.height(8.dp))
+                        Text(s.message, color = Color.Gray, fontSize = 13.sp,
+                            textAlign = TextAlign.Center)
+                        Spacer(Modifier.height(12.dp))
+                        TextButton(onClick = { viewModel.loadEvents() }) { Text("Reintentar") }
+                    }
+                }
+            }
 
-        Text("CALENDARIO DE EVENTOS", fontWeight = FontWeight.Bold, color = LightText, fontSize = 12.sp)
+            is EventsViewModel.EventsState.Success -> {
+                val allEventos = s.eventos
+                val filters   = listOf("Todos") + allEventos.map { it.tipo }.distinct().sorted()
+                val filtered  = if (selectedFilter == "Todos") allEventos
+                                else allEventos.filter { it.tipo == selectedFilter }
 
-        Spacer(modifier = Modifier.height(16.dp))
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    items(filters) { filter ->
+                        FilterChip(
+                            selected = selectedFilter == filter,
+                            onClick  = { selectedFilter = filter },
+                            label    = { Text(filter, fontSize = 12.sp) },
+                            colors   = FilterChipDefaults.filterChipColors(
+                                selectedContainerColor = PrimaryOrange,
+                                selectedLabelColor     = Color.White,
+                                labelColor             = LightText
+                            )
+                        )
+                    }
+                }
 
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(bottom = 20.dp)
-        ) {
-            items(filteredEvents) { event ->
-                EventCard(event, onStartRoute)
+                Spacer(modifier = Modifier.height(20.dp))
+                Text("CALENDARIO DE EVENTOS",
+                    fontWeight = FontWeight.Bold, color = LightText, fontSize = 12.sp)
+                Spacer(modifier = Modifier.height(16.dp))
+
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding      = PaddingValues(bottom = 24.dp)
+                ) {
+                    items(filtered, key = { it.id }) { evento ->
+                        EventCard(evento = evento, onStartRoute = onStartRoute)
+                    }
+                }
             }
         }
     }
 }
 
+// ─── Card de evento ───────────────────────────────────────────────────────────
+
 @Composable
-fun EventCard(event: CampusEvent, onStartRoute: (LatLng, String) -> Unit) {
+fun EventCard(
+    evento: EventoJson,
+    onStartRoute: (nodeId: String, name: String) -> Unit
+) {
     var showDetails by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
+    val tipoColor = when (evento.tipo) {
+        "Académico"   -> Color(0xFF1565C0)
+        "Laboral"     -> Color(0xFF2E7D32)
+        "Conferencia" -> Color(0xFF6A1B9A)
+        "Deportivo"   -> Color(0xFFE65100)
+        "Cultural"    -> Color(0xFFC62828)
+        "Taller"      -> Color(0xFF00838F)
+        else          -> PrimaryOrange
+    }
+
     Card(
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        shape    = RoundedCornerShape(24.dp),
+        colors   = CardDefaults.cardColors(containerColor = Color.White),
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+
+            // Encabezado: tipo + fecha
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Surface(
-                    color = PrimaryOrange.copy(alpha = 0.1f),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
+                Surface(color = tipoColor.copy(alpha = 0.10f), shape = RoundedCornerShape(8.dp)) {
                     Text(
-                        event.category,
-                        color = PrimaryOrange,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold,
+                        evento.tipo, color = tipoColor,
+                        fontSize = 10.sp, fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
+                if (!evento.activo) {
+                    Spacer(Modifier.width(8.dp))
+                    Surface(color = Color(0xFFEEEEEE), shape = RoundedCornerShape(8.dp)) {
+                        Text("FINALIZADO", color = Color.Gray,
+                            fontSize = 9.sp, fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                    }
+                }
                 Spacer(modifier = Modifier.weight(1f))
-                Text(event.date, color = LightText, fontSize = 12.sp)
+                Text(formatEventDate(evento.fechaInicio), color = LightText, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            Text(event.title, fontWeight = FontWeight.Bold, fontSize = 18.sp, color = DarkText)
-            
+            Text(evento.titulo, fontWeight = FontWeight.Bold, fontSize = 17.sp, color = DarkText)
+
             Spacer(modifier = Modifier.height(8.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.LocationOn, null, tint = PrimaryOrange, modifier = Modifier.size(16.dp))
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(event.location, fontSize = 14.sp, color = LightText)
+
+            // Lugar
+            if (evento.lugar.isNotBlank()) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.LocationOn, null,
+                        tint = if (evento.idNodo != null) PrimaryOrange else LightText,
+                        modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(evento.lugar, fontSize = 13.sp, color = LightText)
+                    // Indicador de que tiene ubicación en el mapa
+                    if (evento.idNodo != null) {
+                        Spacer(Modifier.width(6.dp))
+                        Surface(
+                            color = PrimaryOrange.copy(alpha = 0.10f),
+                            shape = RoundedCornerShape(4.dp)
+                        ) {
+                            Text("EN MAPA", fontSize = 8.sp, color = PrimaryOrange,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp))
+                        }
+                    }
+                }
             }
 
+            // Hora
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.Schedule, null,
+                    tint = LightText, modifier = Modifier.size(14.dp))
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    "${formatEventTime(evento.fechaInicio)} – ${formatEventTime(evento.fechaFin)}",
+                    fontSize = 12.sp, color = LightText
+                )
+            }
+
+            // Sección expandida
             if (showDetails) {
                 Spacer(modifier = Modifier.height(12.dp))
-                Text(event.description, fontSize = 14.sp, color = DarkText)
-                
-                if (event.link != null) {
+                HorizontalDivider(color = Color(0xFFF0F0F0))
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(evento.descripcion, fontSize = 14.sp, color = DarkText, lineHeight = 20.sp)
+
+                if (evento.urlInscripcion.isNotBlank()) {
                     Spacer(modifier = Modifier.height(12.dp))
                     TextButton(
                         onClick = {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(event.link))
-                            context.startActivity(intent)
+                            context.startActivity(
+                                Intent(Intent.ACTION_VIEW, Uri.parse(evento.urlInscripcion))
+                            )
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.textButtonColors(contentColor = PrimaryOrange)
+                        colors   = ButtonDefaults.textButtonColors(contentColor = PrimaryOrange)
                     ) {
                         Icon(Icons.Default.Link, null)
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(Modifier.width(8.dp))
                         Text("FORMULARIO DE INSCRIPCIÓN")
                     }
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(
-                        onClick = { 
-                            if (event.poiLocation != null) {
-                                onStartRoute(event.poiLocation, event.location)
-                            }
-                        },
-                        modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = PrimaryOrange)
-                    ) {
-                        Icon(Icons.Default.Navigation, null, modifier = Modifier.size(18.dp))
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("COMENZAR VIAJE", fontSize = 12.sp)
+
+                    // Botón IR AL LUGAR — solo si tiene nodo asignado
+                    if (evento.idNodo != null) {
+                        Button(
+                            onClick  = { onStartRoute(evento.idNodo, evento.lugar.ifBlank { evento.titulo }) },
+                            modifier = Modifier.weight(1f),
+                            shape    = RoundedCornerShape(12.dp),
+                            colors   = ButtonDefaults.buttonColors(containerColor = PrimaryOrange)
+                        ) {
+                            Icon(Icons.Default.Navigation, null, modifier = Modifier.size(16.dp))
+                            Spacer(Modifier.width(6.dp))
+                            Text("IR AL LUGAR", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        }
                     }
-                    
+
                     OutlinedButton(
-                        onClick = { showDetails = false },
-                        modifier = Modifier.weight(0.5f),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Text("CERRAR")
-                    }
+                        onClick  = { showDetails = false },
+                        modifier = if (evento.idNodo != null) Modifier.weight(0.5f)
+                                   else Modifier.fillMaxWidth(),
+                        shape    = RoundedCornerShape(12.dp)
+                    ) { Text("CERRAR", fontSize = 12.sp) }
                 }
+
             } else {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(14.dp))
                 Button(
-                    onClick = { showDetails = true },
+                    onClick  = { showDetails = true },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = PrimaryOrange)
+                    shape    = RoundedCornerShape(12.dp),
+                    colors   = ButtonDefaults.buttonColors(
+                        containerColor = if (evento.activo) PrimaryOrange else Color(0xFFBDBDBD)
+                    )
                 ) {
-                    Text("RESERVAR / VER MÁS")
+                    Text(if (evento.activo) "VER MÁS / INSCRIBIRSE" else "VER DETALLES")
                 }
             }
         }
     }
 }
+
+// ─── Helpers de fecha ─────────────────────────────────────────────────────────
+
+private fun formatEventDate(iso: String): String = try {
+    val input  = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+    val output = SimpleDateFormat("dd MMM", Locale("es", "CO"))
+    output.format(input.parse(iso)!!).uppercase()
+} catch (_: Exception) { iso }
+
+private fun formatEventTime(iso: String): String = try {
+    val input  = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+    val output = SimpleDateFormat("h:mm a", Locale("es", "CO"))
+    output.format(input.parse(iso)!!)
+} catch (_: Exception) { "" }

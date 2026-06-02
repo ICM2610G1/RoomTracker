@@ -1,12 +1,27 @@
 package com.example.roomtracker.navigation
 
+import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.roomtracker.viewmodel.AuthViewModel
+import com.example.roomtracker.viewmodel.FriendsViewModel
+import com.example.roomtracker.viewmodel.ChatViewModel
+import com.example.roomtracker.viewmodel.LocationViewModel
+import com.example.roomtracker.viewmodel.AcademicStatsViewModel
+import com.example.roomtracker.viewmodel.CarnetViewModel
+import com.example.roomtracker.viewmodel.EventsViewModel
+import com.example.roomtracker.viewmodel.OpportunitiesViewModel
+import com.example.roomtracker.viewmodel.FoodViewModel
+import com.example.roomtracker.viewmodel.ShopViewModel
+import com.example.roomtracker.viewmodel.ForoViewModel
+import com.example.roomtracker.viewmodel.OperadorViewModel
+import com.example.roomtracker.viewmodel.ScheduleViewModel
 import com.example.roomtracker.ui.screens.ChatScreen
 import com.example.roomtracker.ui.screens.ForgotPasswordSentScreen
 import com.example.roomtracker.ui.screens.LoginScreen
@@ -18,6 +33,7 @@ import com.example.roomtracker.ui.screens.HomeMapScreen
 import com.example.roomtracker.ui.screens.SettingsScreen
 import com.example.roomtracker.ui.screens.MessagesScreen
 import com.example.roomtracker.ui.screens.PrivacyFriendsScreen
+import com.example.roomtracker.ui.screens.LocationRequestsScreen
 import com.example.roomtracker.ui.screens.FoodMenuScreen
 import com.example.roomtracker.ui.screens.EventsScreen
 import com.example.roomtracker.ui.screens.OpportunitiesScreen
@@ -25,19 +41,28 @@ import com.example.roomtracker.ui.screens.ScheduleScreen
 import com.example.roomtracker.ui.screens.VirtualShopScreen
 import com.example.roomtracker.ui.screens.UserCarnetScreen
 import com.example.roomtracker.ui.screens.AcademicStatsScreen
+import com.example.roomtracker.ui.screens.ForoScreen
+import com.example.roomtracker.ui.screens.OperadorHomeScreen
+import com.example.roomtracker.ui.screens.QrScannerScreen
+import com.example.roomtracker.ui.screens.UniversityStatsScreen
+import com.example.roomtracker.viewmodel.PedometerViewModel
 
 enum class AppScreens {
     Login, Register, Verification, RegisterSuccess,
     ForgotPassword, ForgotPasswordSent, HomeMap,
-    Settings, Messages, Chat, PrivacyFriends,
+    Settings, Messages, Chat, PrivacyFriends, LocationRequests,
     FoodMenu, Events, Opportunities, MySchedule,
-    VirtualShop, UserCarnet, AcademicStats
+    VirtualShop, UserCarnet, AcademicStats, QrScanner, Foro,
+    OperadorHome, OperadorChat, UniversityStats
 }
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = viewModel()
+    val friendsViewModel: FriendsViewModel = viewModel()
+    val chatViewModel: ChatViewModel = viewModel()
+    val locationViewModel: LocationViewModel = viewModel()
 
     val loginState by authViewModel.loginState.collectAsStateWithLifecycle()
     val registerState by authViewModel.registerState.collectAsStateWithLifecycle()
@@ -46,21 +71,37 @@ fun Navigation() {
     val resetState by authViewModel.resetState.collectAsStateWithLifecycle()
     val instituciones by authViewModel.instituciones.collectAsStateWithLifecycle()
     val sessionChecked by authViewModel.sessionChecked.collectAsStateWithLifecycle()
+    val userTipo by authViewModel.userTipo.collectAsStateWithLifecycle()
+    val sesionInvalidada by locationViewModel.sesionInvalidada.collectAsStateWithLifecycle()
 
-    // Esperar a que se verifique la sesión antes de mostrar nada
-    android.util.Log.d("RT_NAV", "sessionChecked=$sessionChecked")
+    // Si la sesión fue invalidada por otro dispositivo, redirigir al Login
+    LaunchedEffect(sesionInvalidada) {
+        if (sesionInvalidada) {
+            navController.navigate(AppScreens.Login.name) {
+                popUpTo(0) { inclusive = true }
+            }
+        }
+    }
+
+    android.util.Log.d("RT_NAV", "sessionChecked=$sessionChecked userTipo=$userTipo")
     if (sessionChecked == null) return
 
-    val startDestination = if (sessionChecked == true) AppScreens.HomeMap.name else AppScreens.Login.name
+    val startDestination = when {
+        sessionChecked != true    -> AppScreens.Login.name
+        userTipo == "operador"    -> AppScreens.OperadorHome.name
+        else                      -> AppScreens.HomeMap.name
+    }
     android.util.Log.d("RT_NAV", "startDestination=$startDestination")
 
     NavHost(navController = navController, startDestination = startDestination) {
 
         composable(AppScreens.Login.name) {
-            LaunchedEffect(loginState) {
-                if (loginState is AuthViewModel.AuthState.Success) {
+            LaunchedEffect(loginState, userTipo) {
+                if (loginState is AuthViewModel.AuthState.Success && userTipo != null) {
                     authViewModel.resetLoginState()
-                    navController.navigate(AppScreens.HomeMap.name) {
+                    val dest = if (userTipo == "operador") AppScreens.OperadorHome.name
+                               else AppScreens.HomeMap.name
+                    navController.navigate(dest) {
                         popUpTo(AppScreens.Login.name) { inclusive = true }
                     }
                 }
@@ -175,64 +216,169 @@ fun Navigation() {
                         popUpTo(0) { inclusive = true }
                     }
                 },
-                onOpenMessages = { navController.navigate(AppScreens.Messages.name) }
+                onOpenMessages = { navController.navigate(AppScreens.Messages.name) },
+                onOpenStats    = { navController.navigate(AppScreens.UniversityStats.name) },
+                authViewModel  = authViewModel
+            )
+        }
+
+        composable(AppScreens.UniversityStats.name) {
+            val pedometerViewModel: PedometerViewModel = viewModel()
+            UniversityStatsScreen(
+                onBack    = { navController.popBackStack() },
+                viewModel = pedometerViewModel
             )
         }
 
         composable(AppScreens.Messages.name) {
-            MessagesScreen(navController = navController, onBack = { navController.popBackStack() })
+            MessagesScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() },
+                chatViewModel = chatViewModel
+            )
         }
 
-        composable(route = AppScreens.Chat.name + "/{title}") { backStackEntry ->
+        composable(route = AppScreens.Chat.name + "/{operadorId}/{title}") { backStackEntry ->
+            val operadorId = backStackEntry.arguments?.getString("operadorId") ?: ""
             val title = backStackEntry.arguments?.getString("title") ?: ""
-            ChatScreen(title = title, onBack = { navController.popBackStack() })
+            ChatScreen(
+                operadorId = operadorId,
+                title = title,
+                onBack = { navController.popBackStack() },
+                chatViewModel = chatViewModel
+            )
         }
 
         composable(AppScreens.PrivacyFriends.name) {
             PrivacyFriendsScreen(
                 onBack = { navController.popBackStack() },
-                onOpenRequests = {}
+                onOpenRequests = { navController.navigate(AppScreens.LocationRequests.name) },
+                viewModel = friendsViewModel,
+                locationViewModel = locationViewModel
+            )
+        }
+
+        composable(AppScreens.LocationRequests.name) {
+            LocationRequestsScreen(
+                onBack = { navController.popBackStack() },
+                viewModel = friendsViewModel
             )
         }
 
         composable(AppScreens.FoodMenu.name) {
-            FoodMenuScreen(onBack = { navController.popBackStack() })
+            val foodViewModel: FoodViewModel = viewModel()
+            FoodMenuScreen(onBack = { navController.popBackStack() }, viewModel = foodViewModel)
         }
 
         composable(AppScreens.Events.name) {
+            val eventsViewModel: EventsViewModel = viewModel()
             EventsScreen(
                 onBack = { navController.popBackStack() },
-                onStartRoute = { location, name ->
-                    navController.previousBackStackEntry?.savedStateHandle?.set("targetLocation", location)
+                onStartRoute = { nodeId, name ->
+                    // Guardamos el ID del nodo; HomeMapScreen lo resuelve a coordenadas
+                    navController.previousBackStackEntry?.savedStateHandle?.set("targetNodeId", nodeId)
                     navController.previousBackStackEntry?.savedStateHandle?.set("targetName", name)
+                    navController.popBackStack()
+                },
+                viewModel = eventsViewModel
+            )
+        }
+
+        composable(AppScreens.Opportunities.name) {
+            val opportunitiesViewModel: OpportunitiesViewModel = viewModel()
+            OpportunitiesScreen(
+                onBack = { navController.popBackStack() },
+                onStartRoute = { nodeId, name ->
+                    navController.previousBackStackEntry?.savedStateHandle?.set("targetNodeId", nodeId)
+                    navController.previousBackStackEntry?.savedStateHandle?.set("targetName", name)
+                    navController.popBackStack()
+                },
+                viewModel = opportunitiesViewModel
+            )
+        }
+
+        composable(AppScreens.MySchedule.name) {
+            val scheduleViewModel: ScheduleViewModel = viewModel()
+            ScheduleScreen(
+                onBack = { navController.popBackStack() },
+                viewModel = scheduleViewModel
+            )
+        }
+
+        composable(AppScreens.VirtualShop.name) {
+            val shopViewModel: ShopViewModel = viewModel()
+            VirtualShopScreen(
+                onBack    = { navController.popBackStack() },
+                viewModel = shopViewModel,
+                onNavigateToStore = {
+                    navController.previousBackStackEntry?.savedStateHandle?.set("targetNodeId", "286")
+                    navController.previousBackStackEntry?.savedStateHandle?.set("targetName", "Tienda Javeriana")
                     navController.popBackStack()
                 }
             )
         }
 
-        composable(AppScreens.Opportunities.name) {
-            OpportunitiesScreen(onBack = { navController.popBackStack() })
-        }
-
-        composable(AppScreens.MySchedule.name) {
-            ScheduleScreen(onBack = { navController.popBackStack() })
-        }
-
-        composable(AppScreens.VirtualShop.name) {
-            VirtualShopScreen(onBack = { navController.popBackStack() })
-        }
-
         composable(AppScreens.UserCarnet.name) {
+            val carnetViewModel: CarnetViewModel = viewModel()
             UserCarnetScreen(
                 onBack = { navController.popBackStack() },
-                onAccessGranted = {
-                    // Acción opcional al conceder acceso
+                onAccessGranted = { navController.navigate(AppScreens.QrScanner.name) },
+                viewModel = carnetViewModel
+            )
+        }
+
+        composable(AppScreens.QrScanner.name) {
+            QrScannerScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(AppScreens.AcademicStats.name) {
+            val academicStatsViewModel: AcademicStatsViewModel = viewModel()
+            AcademicStatsScreen(
+                onBack = { navController.popBackStack() },
+                viewModel = academicStatsViewModel
+            )
+        }
+
+        composable(AppScreens.Foro.name) {
+            val foroViewModel: ForoViewModel = viewModel()
+            ForoScreen(
+                onBack    = { navController.popBackStack() },
+                viewModel = foroViewModel
+            )
+        }
+
+        // ─── Rutas de operador ────────────────────────────────────────────────
+        composable(AppScreens.OperadorHome.name) {
+            val operadorViewModel: OperadorViewModel = viewModel()
+            val activity = LocalContext.current as? Activity
+
+            // Bloquear el botón atrás — el operador no puede navegar al mapa
+            BackHandler { activity?.finish() }
+
+            OperadorHomeScreen(
+                viewModel  = operadorViewModel,
+                onOpenChat = { chatId, studentName ->
+                    navController.navigate(
+                        "${AppScreens.OperadorChat.name}/$chatId/$studentName"
+                    )
+                },
+                onLogout = {
+                    authViewModel.logout()
+                    activity?.finish() // Cierra la app completamente
                 }
             )
         }
 
-        composable(AppScreens.AcademicStats.name) {
-            AcademicStatsScreen(onBack = { navController.popBackStack() })
+        composable("${AppScreens.OperadorChat.name}/{chatId}/{studentName}") { back ->
+            val chatId      = back.arguments?.getString("chatId") ?: ""
+            val studentName = back.arguments?.getString("studentName") ?: "Estudiante"
+            ChatScreen(
+                operadorId   = "",          // no usado en modo operador
+                title        = studentName,
+                onBack       = { navController.popBackStack() },
+                chatViewModel = chatViewModel,
+                chatIdDirect  = chatId      // nuevo parámetro para modo operador
+            )
         }
     }
 }

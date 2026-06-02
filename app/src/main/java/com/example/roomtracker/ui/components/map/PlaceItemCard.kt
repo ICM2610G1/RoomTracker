@@ -6,88 +6,119 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.roomtracker.map.MapPoi
+import com.example.roomtracker.ui.theme.DarkText
+import com.example.roomtracker.ui.theme.LightText
 import com.example.roomtracker.ui.theme.PrimaryOrange
+
+// ─── Icono y color por TipoEdificio ──────────────────────────────────────────
+
+fun tipoIcon(tipo: String?): ImageVector = when (tipo) {
+    "cafeteria"    -> Icons.Default.LocalCafe
+    "restaurante"  -> Icons.Default.Restaurant
+    "cancha"       -> Icons.Default.FitnessCenter
+    "auditorio"    -> Icons.Default.Theaters
+    "biblioteca"   -> Icons.Default.LocalLibrary
+    "capilla"      -> Icons.Default.Church
+    "enfermeria"   -> Icons.Default.LocalHospital
+    "parqueadero"  -> Icons.Default.LocalParking
+    "agua"         -> Icons.Default.WaterDrop
+    "bus"          -> Icons.Default.DirectionsBus
+    "tienda"       -> Icons.Default.ShoppingBag
+    else           -> Icons.Default.Business          // "edificio" y null
+}
+
+fun tipoColor(tipo: String?): Color = when (tipo) {
+    "cafeteria"    -> Color(0xFF6D4C41)
+    "restaurante"  -> Color(0xFFE65100)
+    "cancha"       -> Color(0xFF2E7D32)
+    "auditorio"    -> Color(0xFF6A1B9A)
+    "biblioteca"   -> Color(0xFF1565C0)
+    "capilla"      -> Color(0xFF880E4F)
+    "enfermeria"   -> Color(0xFFC62828)
+    "parqueadero"  -> Color(0xFF37474F)
+    "agua"         -> Color(0xFF0288D1)
+    "bus"          -> Color(0xFF00695C)
+    "tienda"       -> Color(0xFFE65100)
+    else           -> PrimaryOrange
+}
+
+// ─── Card ─────────────────────────────────────────────────────────────────────
 
 @Composable
 fun PlaceItemCard(
-    title: String,
+    poi: MapPoi,
     onCardClick: () -> Unit,
     onInfoClick: () -> Unit
-){
+) {
+    val tipo  = poi.info?.tipo
+    val icon  = tipoIcon(tipo)
+    val color = tipoColor(tipo)
 
     Card(
-        modifier = Modifier
+        modifier  = Modifier
             .fillMaxWidth()
-            .padding(bottom = 12.dp)
             .clickable { onCardClick() },
-        shape = RoundedCornerShape(20.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        shape     = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+        colors    = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
-            modifier = Modifier
+            modifier          = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(horizontal = 14.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
-            // 🏢 Icono con fondo circular
+            // Ícono con color según tipo
             Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(
-                        color = PrimaryOrange.copy(alpha = 0.15f),
-                        shape = CircleShape
-                    ),
+                modifier         = Modifier
+                    .size(46.dp)
+                    .background(color.copy(alpha = 0.12f), CircleShape),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Default.LocationOn,
-                    contentDescription = null,
-                    tint = PrimaryOrange
-                )
+                Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(22.dp))
             }
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            // 🏷 Información
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
+            // Nombre + nodeId pequeño
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium
+                    text       = poi.displayName,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize   = 15.sp,
+                    color      = DarkText,
+                    maxLines   = 1
                 )
-
+                // nodeId muy pequeño — útil para identificar nodos sin nombre
                 Text(
-                    text = "Facultad de Artes",
-                    style = MaterialTheme.typography.bodySmall
+                    text     = poi.nodeId,
+                    fontSize = 9.sp,
+                    color    = LightText.copy(alpha = 0.6f),
+                    maxLines = 1
                 )
             }
 
-            // 📏 Distancia
-            Text(
-                text = "200m",
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(end = 8.dp)
-            )
-
-            // 🔵 BOTÓN AZUL
+            // Botón de info
             FloatingActionButton(
-                onClick = onInfoClick,
-                containerColor = Color(0xFF2962FF),
-                modifier = Modifier.size(42.dp)
+                onClick         = onInfoClick,
+                containerColor  = color,
+                modifier        = Modifier.size(38.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Info,
+                    imageVector      = Icons.Default.Info,
                     contentDescription = null,
-                    tint = Color.White
+                    tint             = Color.White,
+                    modifier         = Modifier.size(18.dp)
                 )
             }
         }

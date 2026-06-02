@@ -15,32 +15,25 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.roomtracker.ui.components.common.ScreenHeader
 import com.example.roomtracker.ui.theme.BackgroundGray
 import com.example.roomtracker.ui.theme.DarkText
 import com.example.roomtracker.ui.theme.LightText
 import com.example.roomtracker.ui.theme.PrimaryOrange
-
-data class LocationRequest(
-    val id: String,
-    val name: String,
-    val email: String,
-    val role: String,
-    val initial: String
-)
+import com.example.roomtracker.model.AmigoConAmistad
+import com.example.roomtracker.viewmodel.FriendsViewModel
 
 @Composable
 fun LocationRequestsScreen(
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    viewModel: FriendsViewModel
 ) {
-    var requests by remember {
-        mutableStateOf(
-            listOf(
-                LocationRequest("1", "Mariana López", "m.lopez@javeriana.edu.co", "ESTUDIANTE", "M"),
-                LocationRequest("2", "Roberto Gomez", "r.gomez@javeriana.edu.co", "PROFESOR", "R"),
-                LocationRequest("3", "Lucía Fernández", "l.fer@javeriana.edu.co", "ESTUDIANTE", "L")
-            )
-        )
+    val pendingRequests by viewModel.pendingRequests.collectAsStateWithLifecycle()
+
+    // Recargar solicitudes cada vez que se abre esta pantalla
+    LaunchedEffect(Unit) {
+        viewModel.loadPendingRequests()
     }
 
     Column(
@@ -67,20 +60,32 @@ fun LocationRequestsScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (requests.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("No tienes solicitudes pendientes", color = LightText)
+        if (pendingRequests.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(
+                        Icons.Default.Inbox,
+                        contentDescription = null,
+                        tint = LightText,
+                        modifier = Modifier.size(48.dp)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("No tienes solicitudes pendientes", color = LightText)
+                }
             }
         } else {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(bottom = 20.dp)
             ) {
-                items(requests) { request ->
+                items(pendingRequests, key = { it.amistadId }) { request ->
                     RequestCard(
-                        request = request,
-                        onAccept = { requests = requests.filter { it.id != request.id } },
-                        onDecline = { requests = requests.filter { it.id != request.id } }
+                        amigoConAmistad = request,
+                        onAccept = { viewModel.acceptRequest(request.amistadId) },
+                        onDecline = { viewModel.rejectRequest(request.amistadId) }
                     )
                 }
             }
@@ -90,7 +95,7 @@ fun LocationRequestsScreen(
 
 @Composable
 fun RequestCard(
-    request: LocationRequest,
+    amigoConAmistad: AmigoConAmistad,
     onAccept: () -> Unit,
     onDecline: () -> Unit
 ) {
@@ -110,7 +115,7 @@ fun RequestCard(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        request.initial,
+                        amigoConAmistad.usuario.nombre.first().uppercaseChar().toString(),
                         fontWeight = FontWeight.Bold,
                         color = PrimaryOrange,
                         fontSize = 18.sp
@@ -120,9 +125,17 @@ fun RequestCard(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(request.name, fontWeight = FontWeight.Bold, color = DarkText)
-                    Text(request.email, fontSize = 12.sp, color = LightText)
-                    Text(request.role, fontSize = 11.sp, color = PrimaryOrange, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        "${amigoConAmistad.usuario.nombre} ${amigoConAmistad.usuario.apellido}",
+                        fontWeight = FontWeight.Bold,
+                        color = DarkText
+                    )
+                    Text(
+                        "ESTUDIANTE JAVERIANO",
+                        fontSize = 11.sp,
+                        color = PrimaryOrange,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
             }
 
@@ -136,7 +149,9 @@ fun RequestCard(
                     onClick = onDecline,
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error
+                    )
                 ) {
                     Text("Rechazar")
                 }

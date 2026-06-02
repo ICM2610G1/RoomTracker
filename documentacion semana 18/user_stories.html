@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoomTracker - Historias de Usuario</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #003d7a 0%, #00bcd4 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .module-section {
+            margin-bottom: 50px;
+        }
+
+        .module-title {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px 12px 0 0;
+            font-size: 1.8em;
+            font-weight: bold;
+            border-left: 5px solid #00ff88;
+            margin-bottom: 0;
+        }
+
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 25px;
+            padding: 30px;
+            background: white;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .story-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%);
+            border: 2px solid #e0e7ff;
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,61,122,0.2);
+            border-color: #00bcd4;
+        }
+
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #003d7a, #00bcd4, #00ff88);
+        }
+
+        .story-number {
+            display: inline-block;
+            background: #003d7a;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .story-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #003d7a;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .story-as {
+            background: rgba(0,189,212,0.1);
+            padding: 12px;
+            border-left: 3px solid #00bcd4;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-style: italic;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .story-so {
+            background: rgba(0,255,136,0.1);
+            padding: 12px;
+            border-left: 3px solid #00ff88;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .acceptance-criteria {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e7ff;
+        }
+
+        .acceptance-title {
+            font-weight: bold;
+            color: #003d7a;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .criteria-list {
+            list-style: none;
+        }
+
+        .criteria-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #555;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .criteria-list li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #00ff88;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .priority {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .priority.alta {
+            background: rgba(255,76,76,0.2);
+            color: #d32f2f;
+            border: 1px solid #d32f2f;
+        }
+
+        .priority.media {
+            background: rgba(255,152,0,0.2);
+            color: #f57c00;
+            border: 1px solid #f57c00;
+        }
+
+        .priority.baja {
+            background: rgba(76,175,80,0.2);
+            color: #388e3c;
+            border: 1px solid #388e3c;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding: 30px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .stories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .module-title {
+                font-size: 1.3em;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            background: #003d7a;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            margin-right: 8px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗺️ RoomTracker</h1>
+            <p>Historias de Usuario - Especificación Completa</p>
+        </div>
+
+        <!-- MÓDULO 1: AUTENTICACIÓN Y PERFIL -->
+        <div class="module-section">
+            <div class="module-title">🔐 Autenticación y Gestión de Perfil</div>
+            <div class="stories-grid">
+                <div class="story-card">
+                    <div class="story-number">US-1</div>
+                    <div class="story-title">Registrarse en la aplicación</div>
+                    <div class="badge">Autenticación</div>
+                    <div class="story-as">Como visitante nuevo, quiero registrarme en RoomTracker para acceder a todas las funcionalidades.</div>
+                    <div class="story-so">Para poder usar la aplicación de forma personalizada y guardar mis preferencias.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Puedo ingresar correo electrónico y contraseña</li>
+                            <li>La contraseña debe tener mínimo 8 caracteres</li>
+                            <li>Se valida que el correo sea único en el sistema</li>
+                            <li>Se envía email de confirmación</li>
+                            <li>Puedo acceder a la app tras confirmar email</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-2</div>
+                    <div class="story-title">Iniciar sesión con credenciales</div>
+                    <div class="badge">Autenticación</div>
+                    <div class="story-as">Como usuario registrado, quiero iniciar sesión con mis credenciales para acceder a mi cuenta.</div>
+                    <div class="story-so">Para mantener mi información personal segura y accesible solo para mí.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Puedo ingresar correo y contraseña</li>
+                            <li>Se validan las credenciales contra la base de datos</li>
+                            <li>Se genera un token de sesión</li>
+                            <li>Se muestra error si credenciales son incorrectas</li>
+                            <li>Puedo recuperar contraseña olvidada</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-3</div>
+                    <div class="story-title">Seleccionar institución al registrarse</div>
+                    <div class="badge">Autenticación</div>
+                    <div class="story-as">Como usuario nuevo, quiero seleccionar mi institución educativa durante el registro.</div>
+                    <div class="story-so">Para que la app cargue los datos y mapas específicos de mi universidad.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se muestra lista de instituciones disponibles</li>
+                            <li>Puedo buscar mi institución por nombre</li>
+                            <li>La institución seleccionada se guarda en mi perfil</li>
+                            <li>El mapa cambia según la institución</li>
+                            <li>Puedo cambiar institución después</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-4</div>
+                    <div class="story-title">Editar perfil de usuario</div>
+                    <div class="badge">Perfil</div>
+                    <div class="story-as">Como usuario, quiero editar mi información de perfil (nombre, foto, programa académico).</div>
+                    <div class="story-so">Para mantener mis datos actualizados y personalizados.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Puedo actualizar nombre, apellido y foto de perfil</li>
+                            <li>Puedo seleccionar mi programa académico</li>
+                            <li>Los cambios se guardan en la base de datos</li>
+                            <li>Se valida que los campos no estén vacíos</li>
+                            <li>La foto se comprime antes de subirla</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-5</div>
+                    <div class="story-title">Ver y descargar carnet digital</div>
+                    <div class="badge">Perfil</div>
+                    <div class="story-as">Como estudiante, quiero ver mi carnet universitario digital en la app.</div>
+                    <div class="story-so">Para no cargar el carnet físico y tener acceso rápido a mis datos de estudiante.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se muestra mi foto y datos básicos</li>
+                            <li>Se incluye código QR del carnet</li>
+                            <li>Puedo compartir el carnet digital</li>
+                            <li>Puedo descargar como imagen</li>
+                            <li>Se actualiza automáticamente desde la BD</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-6</div>
+                    <div class="story-title">Cerrar sesión</div>
+                    <div class="badge">Autenticación</div>
+                    <div class="story-as">Como usuario, quiero cerrar sesión en la aplicación.</div>
+                    <div class="story-so">Para proteger mi privacidad al dejar de usar el dispositivo.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay botón de cerrar sesión en el menú</li>
+                            <li>Se elimina el token de sesión</li>
+                            <li>Se borra caché local sensible</li>
+                            <li>Se vuelve a la pantalla de login</li>
+                            <li>Se pide confirmación antes de cerrar</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO 2: MAPA Y NAVEGACIÓN -->
+        <div class="module-section">
+            <div class="module-title">🗺️ Mapa Interactivo y Navegación GPS</div>
+            <div class="stories-grid">
+                <div class="story-card">
+                    <div class="story-number">US-7</div>
+                    <div class="story-title">Ver mapa interactivo del campus</div>
+                    <div class="badge">Mapa</div>
+                    <div class="story-as">Como usuario, quiero ver un mapa interactivo completo del campus.</div>
+                    <div class="story-so">Para orientarme y visualizar la distribución de edificios y servicios.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>El mapa carga rápidamente (menos de 2 segundos)</li>
+                            <li>Muestra todos los edificios del campus</li>
+                            <li>Puedo hacer zoom y pan</li>
+                            <li>Los puntos de interés están marcados con iconos</li>
+                            <li>Se actualizan automáticamente cuando hay cambios</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-8</div>
+                    <div class="story-title">Buscar edificios o servicios en el mapa</div>
+                    <div class="badge">Mapa</div>
+                    <div class="story-as">Como usuario, quiero buscar un edificio o servicio específico en el campus.</div>
+                    <div class="story-so">Para encontrarlo rápidamente sin tener que explorar todo el mapa.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay una barra de búsqueda en el mapa</li>
+                            <li>Puedo escribir nombre del edificio o servicio</li>
+                            <li>Se filtran resultados mientras escribo</li>
+                            <li>Se selecciona el resultado y se enfoca en el mapa</li>
+                            <li>Se muestra información del lugar seleccionado</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-9</div>
+                    <div class="story-title">Ver detalles de un edificio</div>
+                    <div class="badge">Mapa</div>
+                    <div class="story-as">Como usuario, quiero ver información detallada de un edificio (descripción, pisos, servicios).</div>
+                    <div class="story-so">Para saber qué hay en el edificio antes de ir allí.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Al tocar un edificio, se abre hoja de detalles</li>
+                            <li>Se muestra foto, descripción y nombre</li>
+                            <li>Se lista cada piso con sus espacios</li>
+                            <li>Se muestran servicios disponibles</li>
+                            <li>Hay botón para obtener ruta hacia el edificio</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-10</div>
+                    <div class="story-title">Obtener ruta de navegación GPS</div>
+                    <div class="badge">Navegación</div>
+                    <div class="story-as">Como usuario, quiero obtener una ruta GPS desde mi ubicación actual a un destino.</div>
+                    <div class="story-so">Para navegar fácilmente sin perder el camino dentro del campus.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>La app solicita permiso de ubicación</li>
+                            <li>Se muestra ruta resaltada en el mapa</li>
+                            <li>Se calcula el tiempo estimado de llegada</li>
+                            <li>Se muestra distancia en metros/km</li>
+                            <li>Se actualizan las indicaciones según me muevo</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-11</div>
+                    <div class="story-title">Ver amigos ubicados en el campus</div>
+                    <div class="badge">Social</div>
+                    <div class="story-as">Como usuario, quiero ver a mis amigos que están en el campus en el mapa.</div>
+                    <div class="story-so">Para encontrarme con ellos o saber dónde están.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se muestran amigos con iconos de color diferente</li>
+                            <li>Puedo ver nombre y ubicación exacta</li>
+                            <li>Puedo seleccionar amigo para obtener ruta hacia él</li>
+                            <li>Se actualizan ubicaciones en tiempo real</li>
+                            <li>Puedo desactivar compartir mi ubicación</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-12</div>
+                    <div class="story-title">Marcar lugares como favoritos</div>
+                    <div class="badge">Mapa</div>
+                    <div class="story-as">Como usuario, quiero marcar mis lugares frecuentes como favoritos.</div>
+                    <div class="story-so">Para acceder rápidamente a las rutas hacia mis destinos habituales.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay opción de marcar como favorito en detalles</li>
+                            <li>Se muestra corazón relleno cuando es favorito</li>
+                            <li>Los favoritos se guardan en perfil</li>
+                            <li>Puedo desmarcar favoritos</li>
+                            <li>Hay sección rápida de favoritos en inicio</li>
+                        </ul>
+                    </div>
+                    <div class="priority baja">Prioridad: Baja</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO 3: ESTADÍSTICAS ACADÉMICAS -->
+        <div class="module-section">
+            <div class="module-title">📊 Estadísticas y Gestión Académica</div>
+            <div class="stories-grid">
+                <div class="story-card">
+                    <div class="story-number">US-13</div>
+                    <div class="story-title">Ver estadísticas académicas</div>
+                    <div class="badge">Académicas</div>
+                    <div class="story-as">Como estudiante, quiero ver un resumen de mis estadísticas académicas (promedio, créditos, semestres).</div>
+                    <div class="story-so">Para monitorear mi desempeño académico.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se muestra promedio general acumulado</li>
+                            <li>Se muestran créditos totales completados</li>
+                            <li>Se indica mejor semestre/ciclo</li>
+                            <li>Se lista cada semestre con sus promedios</li>
+                            <li>La información se carga desde JSON de Storage</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-14</div>
+                    <div class="story-title">Ver materias por semestre</div>
+                    <div class="badge">Académicas</div>
+                    <div class="story-as">Como estudiante, quiero ver todas mis materias agrupadas por semestre.</div>
+                    <div class="story-so">Para revisar mis cursos y desempeño en cada uno.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se listan semestres de forma expandible</li>
+                            <li>Para cada semestre se muestran todas las materias</li>
+                            <li>Se muestra nota, código, créditos</li>
+                            <li>Se calcula promedio del semestre automáticamente</li>
+                            <li>Puedo ordenar por nota o nombre</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-15</div>
+                    <div class="story-title">Editar notas de materias</div>
+                    <div class="badge">Académicas</div>
+                    <div class="story-as">Como estudiante, quiero editar mis notas cuando me equivoqué o necesito actualizar después de cambios.</div>
+                    <div class="story-so">Para mantener mis estadísticas académicas correctas y actualizadas.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay modo de edición con botón lápiz</li>
+                            <li>Puedo editar nota (0-5) de cada materia</li>
+                            <li>Se valida que la nota esté entre 0 y 5</li>
+                            <li>Se recalculan automáticamente todos los promedios</li>
+                            <li>Cambios se guardan en JSON de Storage</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-16</div>
+                    <div class="story-title">Agregar nueva materia a un semestre</div>
+                    <div class="badge">Académicas</div>
+                    <div class="story-as">Como estudiante, quiero agregar una materia que cursé y no está registrada.</div>
+                    <div class="story-so">Para que mi historial académico sea completo y preciso.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay botón "Agregar materia" en modo edición</li>
+                            <li>Se abre formulario con campos: código, nombre, nota, créditos</li>
+                            <li>Se validan todos los campos</li>
+                            <li>La materia se agrega a la lista del semestre</li>
+                            <li>Se recalculan promedios automáticamente</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-17</div>
+                    <div class="story-title">Eliminar materia de un semestre</div>
+                    <div class="badge">Académicas</div>
+                    <div class="story-as">Como estudiante, quiero eliminar una materia que no corresponde a mi historial.</div>
+                    <div class="story-so">Para corregir errores en mis datos académicos.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay botón eliminar en cada materia (modo edición)</li>
+                            <li>Se pide confirmación antes de eliminar</li>
+                            <li>La materia se elimina de la lista</li>
+                            <li>Se recalculan todos los promedios</li>
+                            <li>El cambio se persiste en Storage</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-18</div>
+                    <div class="story-title">Ver gráficos de desempeño académico</div>
+                    <div class="badge">Académicas</div>
+                    <div class="story-as">Como estudiante, quiero ver gráficos que muestren mi evolución académica semestre a semestre.</div>
+                    <div class="story-so">Para visualizar mejor mi progreso y tendencia académica.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se muestra gráfico de línea con promedios por semestre</li>
+                            <li>Se muestra gráfico de barras con créditos por semestre</li>
+                            <li>Se muestra distribución de notas</li>
+                            <li>Gráficos son responsivos</li>
+                            <li>Puedo compartir gráficos</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO 4: MENÚ CAFETERÍA -->
+        <div class="module-section">
+            <div class="module-title">🍽️ Menú de Cafetería y Servicios de Alimentos</div>
+            <div class="stories-grid">
+                <div class="story-card">
+                    <div class="story-number">US-19</div>
+                    <div class="story-title">Ver menú del día de la cafetería</div>
+                    <div class="badge">Cafetería</div>
+                    <div class="story-as">Como estudiante, quiero ver qué alimentos ofrece la cafetería hoy.</div>
+                    <div class="story-so">Para planificar mi almuerzo y saber qué opciones hay disponibles.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se muestra menú del día actual</li>
+                            <li>Se lista cada plato con descripción e ingredientes</li>
+                            <li>Se muestra precio de cada opción</li>
+                            <li>Se indica disponibilidad (agotado/disponible)</li>
+                            <li>Se actualiza automáticamente cada día</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-20</div>
+                    <div class="story-title">Ver menú de semana completa</div>
+                    <div class="badge">Cafetería</div>
+                    <div class="story-as">Como estudiante, quiero ver el menú de la próxima semana para planificar mis comidas.</div>
+                    <div class="story-so">Para decidir dónde comer cada día de la semana.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se muestra menú de 7 días</li>
+                            <li>Cada día está identificado claramente</li>
+                            <li>Puedo navegar entre días</li>
+                            <li>Se muestran todos los platos de cada día</li>
+                            <li>Se resalta el día actual</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-21</div>
+                    <div class="story-title">Filtrar menú por tipo de comida</div>
+                    <div class="badge">Cafetería</div>
+                    <div class="story-as">Como usuario, quiero filtrar el menú por categoría (entradas, platos principales, postres, bebidas).</div>
+                    <div class="story-so">Para encontrar rápidamente lo que me interesa comer.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay filtros para cada categoría</li>
+                            <li>Puedo seleccionar múltiples categorías</li>
+                            <li>Se actualiza la lista mientras filtro</li>
+                            <li>Puedo limpiar filtros con un botón</li>
+                            <li>Se guarda mi preferencia de filtro</li>
+                        </ul>
+                    </div>
+                    <div class="priority baja">Prioridad: Baja</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-22</div>
+                    <div class="story-title">Guardar platos favoritos</div>
+                    <div class="badge">Cafetería</div>
+                    <div class="story-as">Como usuario, quiero marcar mis platos favoritos para acceder rápidamente.</div>
+                    <div class="story-so">Para no tener que buscar cada vez mis comidas preferidas.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay opción de guardar como favorito en cada plato</li>
+                            <li>Se muestra corazón relleno si es favorito</li>
+                            <li>Los favoritos se guardan en perfil</li>
+                            <li>Hay sección de favoritos en menú</li>
+                            <li>Puedo ver cuándo fue la última vez que lo ofrecieron</li>
+                        </ul>
+                    </div>
+                    <div class="priority baja">Prioridad: Baja</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-23</div>
+                    <div class="story-title">Recibir notificaciones de menú especial</div>
+                    <div class="badge">Notificaciones</div>
+                    <div class="story-as">Como usuario, quiero recibir notificación cuando hay menú especial o evento en la cafetería.</div>
+                    <div class="story-so">Para no perderme ofertas o comidas especiales.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se envía notificación push al detectar menú especial</li>
+                            <li>Puedo habilitar/deshabilitar notificaciones</li>
+                            <li>Se puede configurar horario de notificaciones</li>
+                            <li>Se muestra badge en la app</li>
+                            <li>Puedo marcar como leída</li>
+                        </ul>
+                    </div>
+                    <div class="priority baja">Prioridad: Baja</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO 5: CHAT Y REDES SOCIALES -->
+        <div class="module-section">
+            <div class="module-title">💬 Chat y Red Social Universitaria</div>
+            <div class="stories-grid">
+                <div class="story-card">
+                    <div class="story-number">US-24</div>
+                    <div class="story-title">Ver lista de amigos/contactos</div>
+                    <div class="badge">Social</div>
+                    <div class="story-as">Como usuario, quiero ver una lista de mis amigos/contactos en la plataforma.</div>
+                    <div class="story-so">Para comunicarme con ellos y saber quiénes están usando la app.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se muestra lista de contactos con foto y nombre</li>
+                            <li>Se indica si están en línea/fuera de línea</li>
+                            <li>Puedo buscar contacto por nombre</li>
+                            <li>Se muestra último mensaje de cada contacto</li>
+                            <li>Puedo ordenar por nombre o últimas conversaciones</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-25</div>
+                    <div class="story-title">Enviar mensaje directo a un usuario</div>
+                    <div class="badge">Chat</div>
+                    <div class="story-as">Como usuario, quiero enviar mensajes privados a otros usuarios.</div>
+                    <div class="story-so">Para comunicarme directamente con mis compañeros.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Puedo abrir chat con cualquier usuario</li>
+                            <li>Puedo escribir y enviar mensajes de texto</li>
+                            <li>Se muestra hora de envío de cada mensaje</li>
+                            <li>Veo indicador de "escritura..." cuando otro escribe</li>
+                            <li>Los mensajes se guardan en historial</li>
+                        </ul>
+                    </div>
+                    <div class="priority alta">Prioridad: Alta</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-26</div>
+                    <div class="story-title">Enviar archivos en mensajes</div>
+                    <div class="badge">Chat</div>
+                    <div class="story-as">Como usuario, quiero enviar imágenes, documentos o archivos en mis mensajes.</div>
+                    <div class="story-so">Para compartir trabajos, apuntes o fotos con mis compañeros.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay botón para adjuntar archivos</li>
+                            <li>Puedo seleccionar fotos de la galería</li>
+                            <li>Puedo tomar foto con cámara</li>
+                            <li>Se comprime/optimiza antes de enviar</li>
+                            <li>El receptor ve preview del archivo</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-27</div>
+                    <div class="story-title">Crear y participar en grupos de chat</div>
+                    <div class="badge">Chat</div>
+                    <div class="story-as">Como usuario, quiero crear grupos de chat con varios compañeros para proyectos o discusiones.</div>
+                    <div class="story-so">Para comunicarme con múltiples personas en un solo lugar.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Puedo crear nuevo grupo especificando nombre</li>
+                            <li>Puedo agregar miembros a un grupo</li>
+                            <li>Se muestra lista de miembros del grupo</li>
+                            <li>Todos los miembros ven los mismos mensajes</li>
+                            <li>Puedo salir del grupo en cualquier momento</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-28</div>
+                    <div class="story-title">Agregar o eliminar amigos</div>
+                    <div class="badge">Social</div>
+                    <div class="story-as">Como usuario, quiero enviar solicitudes de amistad y aceptar/rechazar las que reciba.</div>
+                    <div class="story-so">Para construir mi red de contactos en la plataforma.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Puedo buscar otros usuarios por nombre/código</li>
+                            <li>Hay botón "Agregar como amigo"</li>
+                            <li>Se envía solicitud al otro usuario</li>
+                            <li>Recibo notificación de solicitudes pendientes</li>
+                            <li>Puedo aceptar o rechazar solicitudes</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-29</div>
+                    <div class="story-title">Ver perfil de otros usuarios</div>
+                    <div class="badge">Social</div>
+                    <div class="story-as">Como usuario, quiero ver el perfil de otros usuarios (foto, programa, bio).</div>
+                    <div class="story-so">Para conocer mejor a mis compañeros antes de agregarlos.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se muestra foto de perfil grande</li>
+                            <li>Se muestra nombre, programa y año académico</li>
+                            <li>Se muestra bio o descripción personal</li>
+                            <li>Se indica si somos amigos</li>
+                            <li>Hay opción de enviar mensaje directo</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO 6: HORARIO Y EVENTOS -->
+        <div class="module-section">
+            <div class="module-title">📅 Horario de Clases y Eventos del Campus</div>
+            <div class="stories-grid">
+                <div class="story-card">
+                    <div class="story-number">US-30</div>
+                    <div class="story-title">Ver horario de clases semanal</div>
+                    <div class="badge">Horario</div>
+                    <div class="story-as">Como estudiante, quiero ver mi horario de clases de la semana.</div>
+                    <div class="story-so">Para planificar mi semana y saber cuándo tengo clase.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se muestra vista semanal con días lunes-viernes</li>
+                            <li>Se muestran horarios en formato de bloques</li>
+                            <li>Para cada clase se muestra materia, hora, ubicación</li>
+                            <li>Puedo ver detalles tocando una clase</li>
+                            <li>Se resalta la clase actual</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-31</div>
+                    <div class="story-title">Obtener ruta a mi clase actual</div>
+                    <div class="badge">Navegación</div>
+                    <div class="story-as">Como estudiante, quiero obtener ruta rápidamente hacia mi clase que está por empezar.</div>
+                    <div class="story-so">Para no llegar tarde y no perderme camino.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay botón "Ir a la clase" en clase actual</li>
+                            <li>Se abre el mapa con ruta hacia el edificio</li>
+                            <li>Se muestra tiempo estimado de llegada</li>
+                            <li>Se activa navegación GPS</li>
+                            <li>Se puede compartir ubicación de clase con amigos</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-32</div>
+                    <div class="story-title">Ver eventos del campus</div>
+                    <div class="badge">Eventos</div>
+                    <div class="story-as">Como estudiante, quiero ver los eventos que se realizarán en el campus.</div>
+                    <div class="story-so">Para asistir a actividades de interés y no perderme eventos importantes.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se muestra lista de eventos próximos</li>
+                            <li>Para cada evento se muestra nombre, fecha, hora, ubicación</li>
+                            <li>Se puede filtrar por categoría de evento</li>
+                            <li>Puedo ver detalles del evento</li>
+                            <li>Se indica si hay cupo disponible</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-33</div>
+                    <div class="story-title">Registrarse en eventos</div>
+                    <div class="badge">Eventos</div>
+                    <div class="story-as">Como estudiante, quiero registrarme en eventos para confirmar mi asistencia.</div>
+                    <div class="story-so">Para que los organizadores sepan cuántos asistentes esperan.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay botón "Registrarse" en evento</li>
+                            <li>Se guarda mi registro en el evento</li>
+                            <li>Aparece en mi lista de "Mis eventos"</li>
+                            <li>Recibo recordatorio antes del evento</li>
+                            <li>Puedo cancelar registro si cambio de opinión</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-34</div>
+                    <div class="story-title">Recibir notificaciones de eventos</div>
+                    <div class="badge">Notificaciones</div>
+                    <div class="story-as">Como usuario, quiero recibir notificaciones sobre eventos que me interesan.</div>
+                    <div class="story-so">Para no olvidarme de eventos y estar informado de actividades campus.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Recibo notificación push antes del evento (30 min antes)</li>
+                            <li>Puedo personalizar qué eventos me notifican</li>
+                            <li>Puedo silenciar notificaciones de ciertos tipos</li>
+                            <li>Se guarda historial de notificaciones</li>
+                            <li>Puedo cambiar horario de notificaciones</li>
+                        </ul>
+                    </div>
+                    <div class="priority baja">Prioridad: Baja</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-35</div>
+                    <div class="story-title">Crear evento (administrador)</div>
+                    <div class="badge">Administración</div>
+                    <div class="story-as">Como administrador/profesor, quiero crear eventos para el campus.</div>
+                    <div class="story-so">Para informar a estudiantes sobre actividades especiales.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Solo usuarios con rol admin pueden crear</li>
+                            <li>Formulario con: nombre, descripción, fecha, hora, lugar</li>
+                            <li>Se puede subir cartel/imagen del evento</li>
+                            <li>Se puede definir cupo máximo</li>
+                            <li>Se publican automáticamente en la app</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO 7: PEDÓMETRO Y ACTIVIDAD -->
+        <div class="module-section">
+            <div class="module-title">👟 Pedómetro y Seguimiento de Actividad</div>
+            <div class="stories-grid">
+                <div class="story-card">
+                    <div class="story-number">US-36</div>
+                    <div class="story-title">Registrar pasos caminados en el campus</div>
+                    <div class="badge">Actividad</div>
+                    <div class="story-as">Como usuario, quiero que la app registre automáticamente los pasos que doy en el campus.</div>
+                    <div class="story-so">Para monitorear mi actividad física y mantenerme saludable.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Usa sensor de pasos del dispositivo</li>
+                            <li>Solo cuenta pasos dentro del campus (geofencing)</li>
+                            <li>Se actualiza en tiempo real</li>
+                            <li>Se guarda historial diario</li>
+                            <li>Se calcula distancia aproximada</li>
+                        </ul>
+                    </div>
+                    <div class="priority baja">Prioridad: Baja</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-37</div>
+                    <div class="story-title">Ver resumen de actividad diaria</div>
+                    <div class="badge">Actividad</div>
+                    <div class="story-as">Como usuario, quiero ver un resumen de pasos y distancia recorrida hoy.</div>
+                    <div class="story-so">Para conocer mi nivel de actividad física del día.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se muestra total de pasos del día</li>
+                            <li>Se muestra distancia en km/metros</li>
+                            <li>Se muestra objetivo diario (si hay)</li>
+                            <li>Se muestra progreso visual (barra/círculo)</li>
+                            <li>Se compara con promedio personal</li>
+                        </ul>
+                    </div>
+                    <div class="priority baja">Prioridad: Baja</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-38</div>
+                    <div class="story-title">Ver historial de actividad semanal/mensual</div>
+                    <div class="badge">Actividad</div>
+                    <div class="story-as">Como usuario, quiero ver mi historial de pasos y actividad de semanas/meses anteriores.</div>
+                    <div class="story-so">Para ver mi tendencia de actividad a largo plazo.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Se muestra gráfico de barras por día</li>
+                            <li>Se muestra promedio semanal/mensual</li>
+                            <li>Puedo cambiar entre semana/mes/año</li>
+                            <li>Se resaltan picos de actividad</li>
+                            <li>Se puede descargar o compartir reporte</li>
+                        </ul>
+                    </div>
+                    <div class="priority baja">Prioridad: Baja</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-39</div>
+                    <div class="story-title">Compartir logros de actividad</div>
+                    <div class="badge">Social</div>
+                    <div class="story-as">Como usuario, quiero compartir mis logros de actividad con mis amigos.</div>
+                    <div class="story-so">Para motivarme con mis compañeros a ser más activo.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay botón de compartir en pantalla de actividad</li>
+                            <li>Se puede compartir en chat o redes sociales</li>
+                            <li>Se genera imagen con datos del logro</li>
+                            <li>Se muestra en perfil de usuario</li>
+                            <li>Los amigos pueden ver mis récords</li>
+                        </ul>
+                    </div>
+                    <div class="priority baja">Prioridad: Baja</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO 8: NOTIFICACIONES Y CONFIGURACIÓN -->
+        <div class="module-section">
+            <div class="module-title">⚙️ Notificaciones y Configuración del Sistema</div>
+            <div class="stories-grid">
+                <div class="story-card">
+                    <div class="story-number">US-40</div>
+                    <div class="story-title">Gestionar preferencias de notificaciones</div>
+                    <div class="badge">Configuración</div>
+                    <div class="story-as">Como usuario, quiero controlar qué notificaciones recibo y cuándo.</div>
+                    <div class="story-so">Para no ser molestado innecesariamente pero seguir informado.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay sección de notificaciones en configuración</li>
+                            <li>Puedo habilitar/deshabilitar por categoría</li>
+                            <li>Puedo silenciar entre horarios específicos</li>
+                            <li>Puedo cambiar sonido y vibración</li>
+                            <li>Se guardan preferencias en perfil</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-41</div>
+                    <div class="story-title">Cambiar configuración de privacidad</div>
+                    <div class="badge">Configuración</div>
+                    <div class="story-as">Como usuario, quiero controlar mi privacidad (quién ve mi ubicación, perfil, etc.).</div>
+                    <div class="story-so">Para proteger mi información personal según mis preferencias.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Puedo hacer privado mi perfil</li>
+                            <li>Puedo controlar quién ve mi ubicación en tiempo real</li>
+                            <li>Puedo bloquear usuarios específicos</li>
+                            <li>Puedo ocultar mis estadísticas académicas</li>
+                            <li>Se respetar las configuraciones de privacidad</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-42</div>
+                    <div class="story-title">Cambiar tema visual (claro/oscuro)</div>
+                    <div class="badge">Configuración</div>
+                    <div class="story-as">Como usuario, quiero cambiar entre tema claro y oscuro según mi preferencia.</div>
+                    <div class="story-so">Para usar la app cómodamente en cualquier iluminación.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay opción de tema en configuración</li>
+                            <li>Puedo seleccionar claro, oscuro o automático</li>
+                            <li>Se aplica en toda la app inmediatamente</li>
+                            <li>Se guarda la preferencia</li>
+                            <li>El tema oscuro reduce fatiga ocular</li>
+                        </ul>
+                    </div>
+                    <div class="priority baja">Prioridad: Baja</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-43</div>
+                    <div class="story-title">Ver historial de notificaciones</div>
+                    <div class="badge">Notificaciones</div>
+                    <div class="story-as">Como usuario, quiero ver todas las notificaciones que he recibido.</div>
+                    <div class="story-so">Para no perder información importante de notificaciones antiguas.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay sección de "Centro de notificaciones"</li>
+                            <li>Se muestra historial ordenado por fecha</li>
+                            <li>Se agrupan por categoría (eventos, mensajes, etc.)</li>
+                            <li>Puedo marcar como leída/no leída</li>
+                            <li>Se guardan últimas 30 días</li>
+                        </ul>
+                    </div>
+                    <div class="priority baja">Prioridad: Baja</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-44</div>
+                    <div class="story-title">Cambiar idioma de la aplicación</div>
+                    <div class="badge">Configuración</div>
+                    <div class="story-as">Como usuario, quiero cambiar el idioma de la interfaz (español, inglés, etc.).</div>
+                    <div class="story-so">Para usar la app en mi idioma preferido.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay opción de idioma en configuración</li>
+                            <li>Disponibles español e inglés (mínimo)</li>
+                            <li>Se aplica en toda la interfaz inmediatamente</li>
+                            <li>Se guarda preferencia de idioma</li>
+                            <li>Se respeta el idioma del sistema si es posible</li>
+                        </ul>
+                    </div>
+                    <div class="priority baja">Prioridad: Baja</div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-number">US-45</div>
+                    <div class="story-title">Borrar datos de la cuenta</div>
+                    <div class="badge">Configuración</div>
+                    <div class="story-as">Como usuario, quiero poder eliminar completamente mi cuenta y todos mis datos.</div>
+                    <div class="story-so">Para respetar mi derecho a ser olvidado y privacidad de datos.</div>
+                    <div class="acceptance-criteria">
+                        <div class="acceptance-title">Criterios de Aceptación</div>
+                        <ul class="criteria-list">
+                            <li>Hay opción "Eliminar cuenta" en configuración</li>
+                            <li>Se pide confirmación con contraseña</li>
+                            <li>Se avisa que acción es irreversible</li>
+                            <li>Se borra toda información personal</li>
+                            <li>Se borra historial de mensajes y datos</li>
+                        </ul>
+                    </div>
+                    <div class="priority media">Prioridad: Media</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h3>📊 Resumen Total</h3>
+            <p>45 Historias de Usuario | 8 Módulos principales | Desarrollo MVVM + Jetpack Compose | Supabase Backend</p>
+            <p style="margin-top: 15px; font-size: 0.9em;">RoomTracker - Plataforma de Navegación y Servicios Universitarios</p>
+        </div>
+    </div>
+</body>
+</html>

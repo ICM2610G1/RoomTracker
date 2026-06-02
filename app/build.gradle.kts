@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -64,6 +65,24 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:3.0.0")
 
     implementation("io.coil-kt:coil-compose:2.7.0")
+
+    // CameraX
+    implementation("androidx.camera:camera-camera2:1.3.4")
+    implementation("androidx.camera:camera-lifecycle:1.3.4")
+    implementation("androidx.camera:camera-view:1.3.4")
+
+    // ML Kit — escaneo de QR / códigos de barras
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
+
+    // DataStore — almacenamiento local del horario
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    // Splash Screen API
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-messaging-ktx")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

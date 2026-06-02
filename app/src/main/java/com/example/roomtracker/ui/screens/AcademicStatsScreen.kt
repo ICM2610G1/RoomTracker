@@ -1,10 +1,13 @@
 package com.example.roomtracker.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -15,14 +18,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.roomtracker.ui.theme.BackgroundGray
 import com.example.roomtracker.ui.theme.DarkText
 import com.example.roomtracker.ui.theme.LightText
 import com.example.roomtracker.ui.theme.PrimaryOrange
+import com.example.roomtracker.viewmodel.AcademicStatsViewModel
+import com.example.roomtracker.model.EstadisticasJson
+import com.example.roomtracker.model.MateriaJson
+import com.example.roomtracker.model.PeriodoJson
 
 // ══════════════════════════════════════════════
 //  DATA CLASSES
@@ -85,78 +95,33 @@ data class ProfessorSemesterData(
 )
 
 // ══════════════════════════════════════════════
-//  DATOS HARDCODEADOS
+//  MAPEO JSON → DATA CLASSES DE UI
 // ══════════════════════════════════════════════
 
-// Hardcodeado: en produccion viene de Firebase Auth
-private val currentUserType = UserType.ESTUDIANTE
-
-// ── Datos estudiante ──
-
-private val sampleSemesters = listOf(
-    SemesterData(
-        label = "2024-1", year = 2024, cycle = 1,
-        courses = listOf(
-            CourseGrade("Introduccion a la Programacion", "ISIS-1104-1", 4.20, 3),
-            CourseGrade("Calculo Diferencial", "MATE-1203-2", 3.80, 3),
-            CourseGrade("Algebra Lineal", "MATE-1105-1", 3.95, 3),
-            CourseGrade("Escritura Universitaria", "LENG-1501-3", 4.50, 2),
-            CourseGrade("Fundamentos de Ingenieria", "IIND-1000-1", 4.10, 3)
-        ),
-        semesterGpa = 4.08, accumulatedGpa = 4.08,
-        totalCredits = 14, accumulatedCredits = 14
-    ),
-    SemesterData(
-        label = "2024-2", year = 2024, cycle = 2,
-        courses = listOf(
-            CourseGrade("Programacion Orientada a Objetos", "ISIS-1206-2", 4.35, 3),
-            CourseGrade("Calculo Integral", "MATE-1214-1", 3.60, 3),
-            CourseGrade("Fisica Mecanica", "FISI-1018-3", 3.75, 3),
-            CourseGrade("Logica y Matematicas Discretas", "ISIS-1104-3", 4.00, 3),
-            CourseGrade("Constitucion y Democracia", "CPOL-1010-5", 4.40, 2)
-        ),
-        semesterGpa = 3.99, accumulatedGpa = 4.04,
-        totalCredits = 14, accumulatedCredits = 28
-    ),
-    SemesterData(
-        label = "2025-1", year = 2025, cycle = 1,
-        courses = listOf(
-            CourseGrade("Estructuras de Datos", "ISIS-1205-1", 4.10, 3),
-            CourseGrade("Calculo Multivariable", "MATE-1215-2", 3.50, 3),
-            CourseGrade("Fisica Electromagnetismo", "FISI-1019-1", 3.70, 3),
-            CourseGrade("Probabilidad y Estadistica", "IIND-2107-1", 4.25, 3),
-            CourseGrade("Etica", "FILO-1520-4", 4.60, 2)
-        ),
-        semesterGpa = 3.97, accumulatedGpa = 4.01,
-        totalCredits = 14, accumulatedCredits = 42
-    ),
-    SemesterData(
-        label = "2025-2", year = 2025, cycle = 2,
-        courses = listOf(
-            CourseGrade("Analisis de Decision de Inversion", "IND-2401-4", 3.57, 3),
-            CourseGrade("Arquitectura Empresarial", "ISIS-2403-2", 4.52, 3),
-            CourseGrade("Arquitectura y Diseno de Software", "ISIS-2503-4", 4.50, 3),
-            CourseGrade("Bases de Datos", "ISIS-2304-3", 4.30, 3),
-            CourseGrade("Ingles Avanzado", "LENG-2999-1", 4.70, 2)
-        ),
-        semesterGpa = 4.28, accumulatedGpa = 4.08,
-        totalCredits = 14, accumulatedCredits = 56
-    ),
-    SemesterData(
-        label = "2026-1", year = 2026, cycle = 1,
-        courses = listOf(
-            CourseGrade("Programacion Movil", "ISIS-3510-1", 4.80, 3, 65),
-            CourseGrade("Inteligencia Artificial", "ISIS-3301-2", 4.20, 3, 70),
-            CourseGrade("Redes de Computadores", "ISIS-2603-1", 3.90, 3, 60),
-            CourseGrade("Gestion de Proyectos", "IIND-2401-3", 4.10, 3, 55),
-            CourseGrade("Electiva Humanidades", "FILO-2890-1", 4.50, 2, 50)
-        ),
-        semesterGpa = 4.28, accumulatedGpa = 4.11,
-        totalCredits = 14, accumulatedCredits = 70
-    )
-)
-
-// ── Datos profesor ──
+private fun EstadisticasJson.toSemesterDataList(): List<SemesterData> {
+    var acumuladoCreditos = 0
+    return periodos.map { periodo ->
+        acumuladoCreditos += periodo.creditos
+        SemesterData(
+            label = "${periodo.anio}-${periodo.ciclo}",
+            year = periodo.anio,
+            cycle = periodo.ciclo,
+            courses = periodo.materias.map { m ->
+                CourseGrade(
+                    name = m.nombre,
+                    code = m.codigo,
+                    grade = m.nota,
+                    credits = m.creditos,
+                    percentage = m.porcentajeAvance
+                )
+            },
+            semesterGpa = periodo.promedioSemestral,
+            accumulatedGpa = periodo.promedioAcumulado,
+            totalCredits = periodo.creditos,
+            accumulatedCredits = acumuladoCreditos
+        )
+    }
+}
 
 private fun makeDistribution(e: Int, g: Int, a: Int, l: Int, f: Int): List<GradeDistribution> = listOf(
     GradeDistribution("5.0 - 4.5", e, GradeExcellent),
@@ -164,51 +129,6 @@ private fun makeDistribution(e: Int, g: Int, a: Int, l: Int, f: Int): List<Grade
     GradeDistribution("4.0 - 3.5", a, GradeAverage),
     GradeDistribution("3.5 - 3.0", l, GradeLow),
     GradeDistribution("< 3.0", f, Color(0xFF991B1B))
-)
-
-private val sampleProfessorSemesters = listOf(
-    ProfessorSemesterData(
-        label = "2025-2", year = 2025, cycle = 2,
-        courses = listOf(
-            ProfessorCourse(
-                name = "Arquitectura Empresarial", code = "ISIS-2403-2", semestre = "2025-2",
-                totalEstudiantes = 32, aprobados = 28, reprobados = 4,
-                promedioGeneral = 3.85, mejorNota = 4.90, peorNota = 2.30,
-                distribucion = makeDistribution(6, 10, 8, 4, 4)
-            ),
-            ProfessorCourse(
-                name = "Ingenieria de Software", code = "ISIS-2404-1", semestre = "2025-2",
-                totalEstudiantes = 28, aprobados = 25, reprobados = 3,
-                promedioGeneral = 3.92, mejorNota = 4.85, peorNota = 2.50,
-                distribucion = makeDistribution(5, 12, 6, 3, 2)
-            )
-        ),
-        totalEstudiantes = 60, promedioGlobal = 3.88, tasaAprobacion = 88.3
-    ),
-    ProfessorSemesterData(
-        label = "2026-1", year = 2026, cycle = 1,
-        courses = listOf(
-            ProfessorCourse(
-                name = "Programacion Movil", code = "ISIS-3510-1", semestre = "2026-1",
-                totalEstudiantes = 35, aprobados = 33, reprobados = 2,
-                promedioGeneral = 4.12, mejorNota = 4.95, peorNota = 2.80,
-                distribucion = makeDistribution(8, 14, 9, 2, 2)
-            ),
-            ProfessorCourse(
-                name = "Arquitectura Empresarial", code = "ISIS-2403-3", semestre = "2026-1",
-                totalEstudiantes = 30, aprobados = 26, reprobados = 4,
-                promedioGeneral = 3.78, mejorNota = 4.80, peorNota = 2.10,
-                distribucion = makeDistribution(4, 10, 8, 5, 3)
-            ),
-            ProfessorCourse(
-                name = "Seminario de Investigacion", code = "ISIS-3900-1", semestre = "2026-1",
-                totalEstudiantes = 12, aprobados = 12, reprobados = 0,
-                promedioGeneral = 4.45, mejorNota = 5.00, peorNota = 3.80,
-                distribucion = makeDistribution(6, 4, 2, 0, 0)
-            )
-        ),
-        totalEstudiantes = 77, promedioGlobal = 4.05, tasaAprobacion = 92.2
-    )
 )
 
 // ══════════════════════════════════════════════
@@ -228,15 +148,66 @@ private fun gradeColor(grade: Double): Color = when {
 }
 
 // ══════════════════════════════════════════════
-//  PANTALLA PRINCIPAL (ROUTER)
+//  PANTALLA PRINCIPAL
 // ══════════════════════════════════════════════
 
 @Composable
-fun AcademicStatsScreen(onBack: () -> Unit) {
-    // En produccion: userType viene de Firebase Auth → usuario.tipo
-    when (currentUserType) {
-        UserType.ESTUDIANTE -> StudentStatsScreen(onBack)
-        UserType.PROFESOR -> ProfessorStatsScreen(onBack)
+fun AcademicStatsScreen(onBack: () -> Unit, viewModel: AcademicStatsViewModel) {
+    val state by viewModel.statsState.collectAsStateWithLifecycle()
+
+    when (val s = state) {
+        is AcademicStatsViewModel.StatsState.Loading -> {
+            Box(
+                modifier = Modifier.fillMaxSize().background(BackgroundGray),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    CircularProgressIndicator(color = PrimaryOrange)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text("Cargando estadísticas...", color = LightText, fontSize = 14.sp)
+                }
+            }
+        }
+
+        is AcademicStatsViewModel.StatsState.Error -> {
+            Box(
+                modifier = Modifier.fillMaxSize().background(BackgroundGray),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(32.dp)
+                ) {
+                    Icon(
+                        Icons.Default.School, null,
+                        tint = LightText, modifier = Modifier.size(56.dp)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(s.message, color = LightText, fontSize = 14.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Button(
+                        onClick = { viewModel.loadStats() },
+                        colors = ButtonDefaults.buttonColors(containerColor = PrimaryOrange)
+                    ) { Text("Reintentar") }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextButton(onClick = onBack) { Text("Volver") }
+                }
+            }
+        }
+
+        is AcademicStatsViewModel.StatsState.Success -> {
+            val semesters = s.data.toSemesterDataList()
+            val saveState by viewModel.saveState.collectAsStateWithLifecycle()
+            StudentStatsScreen(
+                onBack = onBack,
+                semesters = semesters,
+                totalSemesters = s.data.semestresCursados,
+                bestGpa = s.data.mejorSemestre.promedio,
+                saveState = saveState,
+                onSaveSemester = { anio, ciclo, materias -> viewModel.guardarMaterias(anio, ciclo, materias) },
+                onSaveStateConsumed = { viewModel.resetSaveState() }
+            )
+        }
     }
 }
 
@@ -246,15 +217,63 @@ fun AcademicStatsScreen(onBack: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun StudentStatsScreen(onBack: () -> Unit) {
-
-    val years = sampleSemesters.map { it.year }.distinct().sorted()
+private fun StudentStatsScreen(
+    onBack: () -> Unit,
+    semesters: List<SemesterData>,
+    totalSemesters: Int,
+    bestGpa: Double,
+    saveState: AcademicStatsViewModel.SaveState,
+    onSaveSemester: (anio: Int, ciclo: Int, materias: List<MateriaJson>) -> Unit,
+    onSaveStateConsumed: () -> Unit
+) {
+    val context = LocalContext.current
+    val years = semesters.map { it.year }.distinct().sorted()
     var selectedYear by remember { mutableIntStateOf(years.last()) }
-    var selectedCycle by remember { mutableIntStateOf(sampleSemesters.last().cycle) }
+    var selectedCycle by remember { mutableIntStateOf(semesters.last().cycle) }
     var showHistoryModal by remember { mutableStateOf(false) }
+    var editMode by remember { mutableStateOf(false) }
 
-    val currentSemester = sampleSemesters.find { it.year == selectedYear && it.cycle == selectedCycle }
-    val latestSemester = sampleSemesters.last()
+    val currentSemester = semesters.find { it.year == selectedYear && it.cycle == selectedCycle }
+    val latestSemester = semesters.last()
+
+    // Filas editables del semestre seleccionado
+    val editRows = remember { mutableStateListOf<EditCourseState>() }
+
+    // Al entrar al modo edición, cargar las materias actuales del periodo
+    LaunchedEffect(editMode, selectedYear, selectedCycle) {
+        if (editMode && currentSemester != null) {
+            editRows.clear()
+            currentSemester.courses.forEach {
+                editRows.add(
+                    EditCourseState(
+                        name       = it.name,
+                        code       = it.code,
+                        grade      = it.grade.toString(),
+                        credits    = it.credits.toString(),
+                        percentage = it.percentage
+                    )
+                )
+            }
+        }
+    }
+
+    // Reaccionar al resultado del guardado
+    LaunchedEffect(saveState) {
+        when (saveState) {
+            is AcademicStatsViewModel.SaveState.Saved -> {
+                editMode = false
+                Toast.makeText(context, "Cambios guardados", Toast.LENGTH_SHORT).show()
+                onSaveStateConsumed()
+            }
+            is AcademicStatsViewModel.SaveState.Error -> {
+                Toast.makeText(context, saveState.message, Toast.LENGTH_LONG).show()
+                onSaveStateConsumed()
+            }
+            else -> {}
+        }
+    }
+
+    val saving = saveState is AcademicStatsViewModel.SaveState.Saving
 
     Column(
         modifier = Modifier
@@ -263,121 +282,200 @@ private fun StudentStatsScreen(onBack: () -> Unit) {
     ) {
         Spacer(modifier = Modifier.height(40.dp))
         StatsHeader(
-            title = "Mis Estadisticas",
-            subtitle = "Estudiante",
+            title = if (editMode) "Editar periodo" else "Mis Estadisticas",
+            subtitle = if (editMode) "${selectedYear}-${selectedCycle}" else "Estudiante",
             onBack = onBack,
-            onHistoryClick = { showHistoryModal = true }
+            onHistoryClick = if (editMode) null else { { showHistoryModal = true } },
+            editEnabled = currentSemester != null && !editMode,
+            isEditing = editMode,
+            onEditToggle = { editMode = !editMode }
         )
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.weight(1f),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item { StudentAccumulatedCard(latestSemester) }
-            item {
-                PeriodSelector(
-                    years = years,
-                    selectedYear = selectedYear,
-                    selectedCycle = selectedCycle,
-                    onYearChange = { selectedYear = it },
-                    onCycleChange = { selectedCycle = it }
-                )
-            }
-
-            if (currentSemester != null) {
-                item { SemesterSummaryCard(currentSemester) }
+            if (!editMode) {
+                item { StudentAccumulatedCard(latestSemester, totalSemesters, bestGpa) }
                 item {
-                    Text("Materias del periodo", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = DarkText)
+                    PeriodSelector(
+                        years = years,
+                        selectedYear = selectedYear,
+                        selectedCycle = selectedCycle,
+                        onYearChange = { selectedYear = it },
+                        onCycleChange = { selectedCycle = it }
+                    )
                 }
-                items(currentSemester.courses) { course -> StudentCourseCard(course) }
+
+                if (currentSemester != null) {
+                    item { SemesterSummaryCard(currentSemester) }
+                    item {
+                        Text("Materias del periodo", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = DarkText)
+                    }
+                    items(currentSemester.courses) { course -> StudentCourseCard(course) }
+                } else {
+                    item { EmptyPeriodCard() }
+                }
             } else {
-                item { EmptyPeriodCard() }
+                // ── Modo edición ──
+                item {
+                    Text(
+                        "Edita las notas y créditos, o agrega/elimina materias. " +
+                            "Los promedios se recalculan al guardar.",
+                        fontSize = 12.sp, color = LightText
+                    )
+                }
+                itemsIndexed(editRows) { index, row ->
+                    EditableCourseCard(
+                        row = row,
+                        onDelete = { if (index < editRows.size) editRows.removeAt(index) }
+                    )
+                }
+                item {
+                    OutlinedButton(
+                        onClick = { editRows.add(EditCourseState()) },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Icon(Icons.Default.Add, null, tint = PrimaryOrange)
+                        Spacer(Modifier.width(8.dp))
+                        Text("Agregar materia", color = PrimaryOrange)
+                    }
+                }
             }
             item { Spacer(modifier = Modifier.height(20.dp)) }
+        }
+
+        // ── Barra inferior de guardado (solo en edición) ──
+        if (editMode) {
+            Surface(shadowElevation = 8.dp, color = Color.White) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    OutlinedButton(
+                        onClick = { editMode = false },
+                        modifier = Modifier.weight(1f),
+                        enabled = !saving,
+                        shape = RoundedCornerShape(12.dp)
+                    ) { Text("Cancelar", color = DarkText) }
+
+                    Button(
+                        onClick = {
+                            val materias = editRows.mapNotNull { it.toMateriaOrNull() }
+                            onSaveSemester(selectedYear, selectedCycle, materias)
+                        },
+                        modifier = Modifier.weight(1f),
+                        enabled = !saving,
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = PrimaryOrange)
+                    ) {
+                        if (saving) {
+                            CircularProgressIndicator(
+                                color = Color.White, strokeWidth = 2.dp,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        } else {
+                            Text("Guardar", color = Color.White)
+                        }
+                    }
+                }
+            }
         }
     }
 
     if (showHistoryModal) {
         ModalBottomSheet(onDismissRequest = { showHistoryModal = false }) {
-            StudentHistorySheet(sampleSemesters)
+            StudentHistorySheet(semesters)
         }
     }
 }
 
-// ══════════════════════════════════════════════
-//  VISTA PROFESOR
-// ══════════════════════════════════════════════
+// ── Estado editable de una materia ──
+private class EditCourseState(
+    name: String = "",
+    code: String = "",
+    grade: String = "",
+    credits: String = "",
+    percentage: Int = 100
+) {
+    var name by mutableStateOf(name)
+    var code by mutableStateOf(code)
+    var grade by mutableStateOf(grade)
+    var credits by mutableStateOf(credits)
+    val percentage: Int = percentage
+
+    fun toMateriaOrNull(): MateriaJson? {
+        val nombre = name.trim()
+        if (nombre.isEmpty()) return null
+        val nota = grade.replace(",", ".").toDoubleOrNull()?.coerceIn(0.0, 5.0) ?: 0.0
+        val cred = credits.toIntOrNull()?.coerceAtLeast(0) ?: 0
+        return MateriaJson(
+            codigo           = code.trim(),
+            nombre           = nombre,
+            nota             = nota,
+            creditos         = cred,
+            porcentajeAvance = percentage
+        )
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ProfessorStatsScreen(onBack: () -> Unit) {
-
-    val years = sampleProfessorSemesters.map { it.year }.distinct().sorted()
-    var selectedYear by remember { mutableIntStateOf(years.last()) }
-    var selectedCycle by remember { mutableIntStateOf(sampleProfessorSemesters.last().cycle) }
-    var expandedCourseCode by remember { mutableStateOf<String?>(null) }
-
-    val currentSemester = sampleProfessorSemesters.find { it.year == selectedYear && it.cycle == selectedCycle }
-    val latestSemester = sampleProfessorSemesters.last()
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BackgroundGray)
+private fun EditableCourseCard(row: EditCourseState, onDelete: () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(1.dp)
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
-        StatsHeader(
-            title = "Panel Docente",
-            subtitle = "Profesor",
-            onBack = onBack,
-            onHistoryClick = null
-        )
-
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            // ── Resumen global del profesor ──
-            item { ProfessorGlobalCard(latestSemester) }
-
-            // ── Selector de periodo ──
-            item {
-                PeriodSelector(
-                    years = years,
-                    selectedYear = selectedYear,
-                    selectedCycle = selectedCycle,
-                    onYearChange = { selectedYear = it },
-                    onCycleChange = { selectedCycle = it }
+        Column(modifier = Modifier.padding(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                OutlinedTextField(
+                    value = row.name,
+                    onValueChange = { row.name = it },
+                    label = { Text("Nombre de la materia") },
+                    singleLine = true,
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(onClick = onDelete) {
+                    Icon(Icons.Default.Delete, "Eliminar materia", tint = GradeLow)
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+            OutlinedTextField(
+                value = row.code,
+                onValueChange = { row.code = it },
+                label = { Text("Código") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(Modifier.height(8.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                OutlinedTextField(
+                    value = row.grade,
+                    onValueChange = { row.grade = it },
+                    label = { Text("Nota") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier.weight(1f)
+                )
+                OutlinedTextField(
+                    value = row.credits,
+                    onValueChange = { row.credits = it },
+                    label = { Text("Créditos") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.weight(1f)
                 )
             }
-
-            if (currentSemester != null) {
-                // ── Resumen del semestre ──
-                item { ProfessorSemesterSummary(currentSemester) }
-
-                item {
-                    Text("Cursos del periodo", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = DarkText)
-                }
-
-                // ── Tarjetas de cursos con distribucion expandible ──
-                items(currentSemester.courses) { course ->
-                    ProfessorCourseCard(
-                        course = course,
-                        isExpanded = expandedCourseCode == course.code,
-                        onToggle = {
-                            expandedCourseCode = if (expandedCourseCode == course.code) null else course.code
-                        }
-                    )
-                }
-            } else {
-                item { EmptyPeriodCard() }
-            }
-            item { Spacer(modifier = Modifier.height(20.dp)) }
         }
     }
 }
+
 
 // ══════════════════════════════════════════════
 //  COMPONENTES COMPARTIDOS
@@ -388,7 +486,10 @@ private fun StatsHeader(
     title: String,
     subtitle: String,
     onBack: () -> Unit,
-    onHistoryClick: (() -> Unit)?
+    onHistoryClick: (() -> Unit)?,
+    editEnabled: Boolean = false,
+    isEditing: Boolean = false,
+    onEditToggle: (() -> Unit)? = null
 ) {
     Row(
         modifier = Modifier
@@ -406,6 +507,15 @@ private fun StatsHeader(
         if (onHistoryClick != null) {
             IconButton(onClick = onHistoryClick) {
                 Icon(Icons.Default.History, "Historial", tint = PrimaryOrange)
+            }
+        }
+        if (onEditToggle != null && (editEnabled || isEditing)) {
+            IconButton(onClick = onEditToggle) {
+                Icon(
+                    if (isEditing) Icons.Default.Close else Icons.Default.Edit,
+                    if (isEditing) "Cancelar edición" else "Editar",
+                    tint = PrimaryOrange
+                )
             }
         }
     }
@@ -498,7 +608,7 @@ private fun StatChip(icon: ImageVector, label: String, value: String) {
 // ══════════════════════════════════════════════
 
 @Composable
-private fun StudentAccumulatedCard(latest: SemesterData) {
+private fun StudentAccumulatedCard(latest: SemesterData, totalSemesters: Int, bestGpa: Double) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -530,8 +640,8 @@ private fun StudentAccumulatedCard(latest: SemesterData) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     StatChip(Icons.Default.School, "Creditos", "${latest.accumulatedCredits}")
-                    StatChip(Icons.Default.CalendarMonth, "Semestres", "${sampleSemesters.size}")
-                    StatChip(Icons.Default.TrendingUp, "Mejor sem.", String.format("%.2f", sampleSemesters.maxOf { it.semesterGpa }))
+                    StatChip(Icons.Default.CalendarMonth, "Semestres", "$totalSemesters")
+                    StatChip(Icons.Default.TrendingUp, "Mejor sem.", String.format("%.2f", bestGpa))
                 }
             }
         }

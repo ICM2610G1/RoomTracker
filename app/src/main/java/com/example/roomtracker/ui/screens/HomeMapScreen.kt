@@ -1,4 +1,5 @@
 package com.example.roomtracker.ui.screens
+import androidx.compose.runtime.key
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import android.annotation.SuppressLint
@@ -46,13 +47,16 @@ import com.example.roomtracker.ui.components.map.SmallFab
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.roomtracker.viewmodel.AuthViewModel
+import com.example.roomtracker.viewmodel.LocationViewModel
 import com.example.roomtracker.viewmodel.SensorViewModel
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.example.roomtracker.R
 
 import com.example.roomtracker.map.AStar
 import com.example.roomtracker.map.GraphUtils
 import com.example.roomtracker.map.GraphLoader
+import com.example.roomtracker.service.LocationForegroundService
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("MissingPermission")
@@ -62,32 +66,34 @@ fun HomeMapScreen(navController: NavController) {
     var routingDestinationName by remember { mutableStateOf<String?>(null) }
     var isRouting by remember { mutableStateOf(false) }
     var routeDestination by remember { mutableStateOf<LatLng?>(null) }
-    var selectedPoi by remember { mutableStateOf<Pair<String, LatLng>?>(null) }
-    var showPois by remember { mutableStateOf(true) }
+    var selectedPoi by remember { mutableStateOf<com.example.roomtracker.map.MapPoi?>(null) }
+    var selectedPoiGroup by remember { mutableStateOf<List<com.example.roomtracker.map.MapPoi>?>(null) }
+    var showPois by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val sensorViewModel: SensorViewModel = viewModel()
     val authViewModel: AuthViewModel = viewModel()
+    val locationViewModel: LocationViewModel = viewModel()
     val mapFilesReady by authViewModel.mapFilesReady.collectAsStateWithLifecycle()
+    val amigosEnMapa by locationViewModel.amigosEnMapa.collectAsStateWithLifecycle()
+    val compartiendo by locationViewModel.compartiendo.collectAsStateWithLifecycle()
+    var mostrarAmigos by remember { mutableStateOf(true) }
+
+    // Colores para los pines de amigos
+    val amigoHues = listOf(
+        BitmapDescriptorFactory.HUE_AZURE,
+        BitmapDescriptorFactory.HUE_GREEN,
+        BitmapDescriptorFactory.HUE_VIOLET,
+        BitmapDescriptorFactory.HUE_YELLOW,
+        BitmapDescriptorFactory.HUE_CYAN,
+        BitmapDescriptorFactory.HUE_MAGENTA
+    )
     android.util.Log.d("RT_MAP", "mapFilesReady=$mapFilesReady")
 
-    val targetLocation = navController.currentBackStackEntry
-        ?.savedStateHandle
-        ?.get<LatLng>("targetLocation")
+    val targetNodeId = navController.currentBackStackEntry
+        ?.savedStateHandle?.get<String>("targetNodeId")
     val targetName = navController.currentBackStackEntry
-        ?.savedStateHandle
-        ?.get<String>("targetName")
-
-    LaunchedEffect(targetLocation, targetName) {
-        if (targetLocation != null && targetName != null) {
-            routeDestination = targetLocation
-            routingDestinationName = targetName
-            isRouting = true
-            // Limpiar para evitar re-navegaciones infinitas
-            navController.currentBackStackEntry?.savedStateHandle?.remove<LatLng>("targetLocation")
-            navController.currentBackStackEntry?.savedStateHandle?.remove<String>("targetName")
-        }
-    }
+        ?.savedStateHandle?.get<String>("targetName")
 
     val graphCoordinates = remember(mapFilesReady) {
         if (mapFilesReady) CampusLayer.loadGraphCoordinates(context) else emptyMap()
@@ -111,8 +117,15 @@ fun HomeMapScreen(navController: NavController) {
 
     var search by remember { mutableStateOf("") }
 
+    val poiInfoMap = remember(mapFilesReady) {
+        if (mapFilesReady) CampusLayer.loadPois(context) else emptyMap()
+    }
+    val edificioDetalles = remember(mapFilesReady) {
+        if (mapFilesReady) CampusLayer.loadEdificios(context) else emptyMap()
+    }
     val campusData = remember(mapFilesReady) {
-        if (mapFilesReady) CampusLayer.loadCampus(context) else CampusData(emptyList(), emptyList(), emptyList())
+        if (mapFilesReady) CampusLayer.loadCampus(context, poiInfoMap)
+        else CampusData(emptyList(), emptyList(), emptyList())
     }
     val campusBounds = remember(campusData) {
 
@@ -173,8 +186,27 @@ fun HomeMapScreen(navController: NavController) {
     val visiblePois by remember(mapCenter, campusData) {
         derivedStateOf {
             campusData.pois.filter {
-                distanceMeters(mapCenter, it.second) <= visibleRadius
+                distanceMeters(mapCenter, it.location) <= visibleRadius
             }
+        }
+    }
+
+    // Navegar desde Eventos/Oportunidades usando nodeId
+    LaunchedEffect(targetNodeId, targetName, graphCoordinates) {
+        if (targetNodeId != null && targetName != null && graphCoordinates.isNotEmpty()) {
+            val dest = graphCoordinates[targetNodeId]
+                ?: campusData.pois.firstOrNull { it.nodeId == targetNodeId }?.location
+            if (dest != null) {
+                routeDestination       = dest
+                routingDestinationName = targetName
+                isRouting = true
+                cameraPositionState.animate(
+                    CameraUpdateFactory.newLatLngZoom(dest, 19f),
+                    durationMs = 900
+                )
+            }
+            navController.currentBackStackEntry?.savedStateHandle?.remove<String>("targetNodeId")
+            navController.currentBackStackEntry?.savedStateHandle?.remove<String>("targetName")
         }
     }
 
@@ -182,14 +214,15 @@ fun HomeMapScreen(navController: NavController) {
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.RequestPermission()
         ) { isGranted ->
-
             if (isGranted) {
-
                 fusedLocationClient.requestLocationUpdates(
                     locationRequest,
                     locationCallback,
                     Looper.getMainLooper()
                 )
+                locationViewModel.startLocationUpdates()
+                // Arrancar el servicio de fondo para mantener GPS activo fuera del app
+                LocationForegroundService.start(context)
             }
         }
 
@@ -204,6 +237,9 @@ fun HomeMapScreen(navController: NavController) {
                     locationCallback,
                     Looper.getMainLooper()
                 )
+                locationViewModel.startLocationUpdates()
+                // Servicio ya puede estar corriendo (START_STICKY lo reinicia); esta llamada es idempotente
+                LocationForegroundService.start(context)
             }
             else -> {
                 permissionLauncher.launch(
@@ -390,22 +426,41 @@ fun HomeMapScreen(navController: NavController) {
                         visiblePois
                     }
 
-                    poisToDraw.forEach { (name, location) ->
+                    poisToDraw.forEach { poi ->
 
-                        val markerState = remember(location) {
-                            MarkerState(position = location)
+                        val markerState = remember(poi.location) {
+                            MarkerState(position = poi.location)
                         }
 
                         Marker(
                             state = markerState,
-                            title = name,
+                            title = poi.displayName,
                             onClick = {
-                                selectedPoi = name to location
+                                selectedPoi = poi
                                 true
                             }
                         )
                     }
                 }
+            // MARKERS DE AMIGOS — un color distinto por amigo, posición actualizable
+            if (mostrarAmigos) {
+                amigosEnMapa.forEachIndexed { index, amigo ->
+                    key(amigo.idUsuario) {
+                        val markerState = remember(amigo.idUsuario) { MarkerState(position = amigo.posicion) }
+                        LaunchedEffect(amigo.posicion) {
+                            markerState.position = amigo.posicion
+                        }
+                        val hue = amigoHues[index % amigoHues.size]
+                        Marker(
+                            state = markerState,
+                            title = "${amigo.nombre} ${amigo.apellido}",
+                            snippet = "En campus",
+                            icon = BitmapDescriptorFactory.defaultMarker(hue)
+                        )
+                    }
+                }
+            }
+
             if (
                 isRouting &&
                 userLocation != null &&
@@ -533,6 +588,13 @@ fun HomeMapScreen(navController: NavController) {
                     SmallFab(Icons.Default.Person) {
                         navController.navigate(AppScreens.PrivacyFriends.name)
                     }
+                    // Toggle mostrar/ocultar amigos en el mapa
+                    SmallFab(
+                        icon = if (mostrarAmigos) Icons.Default.People else Icons.Default.PeopleAlt,
+                        containerColor = if (mostrarAmigos) PrimaryOrange else Color.Gray
+                    ) {
+                        mostrarAmigos = !mostrarAmigos
+                    }
                     SmallFab(Icons.Default.Add) {
                         val currentZoom = cameraPositionState.position.zoom
                         cameraPositionState.move(
@@ -617,17 +679,34 @@ fun HomeMapScreen(navController: NavController) {
                 pois = campusData.pois,
                 search = search,
                 onSearchChange = { search = it },
-                onPlaceClick = { name ->
-
-                    val poi = campusData.pois.firstOrNull { it.first == name }
-
-                    if (poi != null) {
-                        selectedPoi = poi
+                onPlaceClick = { poi ->
+                    showSheet = false
+                    selectedPoi = poi
+                    scope.launch {
+                        cameraPositionState.animate(
+                            com.google.android.gms.maps.CameraUpdateFactory
+                                .newLatLngZoom(poi.location, 19f),
+                            durationMs = 800
+                        )
+                    }
+                },
+                onGroupPlaceClick = { group ->
+                    showSheet = false
+                    selectedPoiGroup = group
+                    // Hacer zoom para que quepan todos los accesos
+                    scope.launch {
+                        val bounds = com.google.android.gms.maps.model.LatLngBounds.Builder()
+                            .apply { group.forEach { include(it.location) } }
+                            .build()
+                        cameraPositionState.animate(
+                            CameraUpdateFactory.newLatLngBounds(bounds, 160),
+                            durationMs = 900
+                        )
                     }
                 },
                 onRouteClick = { poi ->
-                    routeDestination = poi.second
-                    routingDestinationName = poi.first
+                    routeDestination = poi.location
+                    routingDestinationName = poi.displayName
                     isRouting = true
                     showSheet = false
                 },
@@ -658,6 +737,10 @@ fun HomeMapScreen(navController: NavController) {
                 onNavigateToStats = {
                     showSheet = false
                     navController.navigate(AppScreens.AcademicStats.name)
+                },
+                onNavigateToForo = {
+                    showSheet = false
+                    navController.navigate(AppScreens.Foro.name)
                 }
             )
         }
@@ -667,14 +750,41 @@ fun HomeMapScreen(navController: NavController) {
             onDismissRequest = { selectedPoi = null }
         ) {
             BuildingDetailSheet(
-                buildingName = selectedPoi!!.first,
-                onClose = { selectedPoi = null },
-                onStartRoute = {
-                    routeDestination = selectedPoi!!.second
-                    routingDestinationName = selectedPoi!!.first
-                    isRouting = true
+                poi             = selectedPoi!!,
+                edificioDetalle = edificioDetalles[selectedPoi!!.nodeId],
+                onClose         = { selectedPoi = null },
+                onStartRoute    = {
+                    routeDestination       = selectedPoi!!.location
+                    routingDestinationName = selectedPoi!!.displayName
+                    isRouting  = true
                     selectedPoi = null
                 }
+            )
+        }
+    }
+
+    // Picker de accesos cuando un edificio tiene múltiples nodos de entrada
+    if (selectedPoiGroup != null) {
+        ModalBottomSheet(onDismissRequest = { selectedPoiGroup = null }) {
+            com.example.roomtracker.ui.components.map.AccesoPicker(
+                group         = selectedPoiGroup!!,
+                onAccesoInfo  = { poi ->
+                    selectedPoiGroup = null
+                    selectedPoi = poi
+                    scope.launch {
+                        cameraPositionState.animate(
+                            CameraUpdateFactory.newLatLngZoom(poi.location, 19f),
+                            durationMs = 600
+                        )
+                    }
+                },
+                onAccesoRoute = { poi ->
+                    routeDestination       = poi.location
+                    routingDestinationName = poi.displayName
+                    isRouting = true
+                    selectedPoiGroup = null
+                },
+                onDismiss = { selectedPoiGroup = null }
             )
         }
     }

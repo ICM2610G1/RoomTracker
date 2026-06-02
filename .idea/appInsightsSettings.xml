@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.roomtracker" />
+                  <option name="mobileSdkAppId" value="1:124943719093:android:97fcbc3e5f39c5b3757cfc" />
+                  <option name="projectId" value="roomtracker-160aa" />
+                  <option name="projectNumber" value="124943719093" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

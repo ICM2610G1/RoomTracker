@@ -1,4 +1,5 @@
 package com.example.roomtracker.ui.screens
+
 import com.example.roomtracker.ui.components.common.ScreenHeader
 import com.example.roomtracker.ui.components.common.SearchField
 import androidx.compose.foundation.background
@@ -7,87 +8,55 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.roomtracker.navigation.AppScreens
 import com.example.roomtracker.ui.theme.BackgroundGray
 import com.example.roomtracker.ui.theme.DarkText
 import com.example.roomtracker.ui.theme.LightText
 import com.example.roomtracker.ui.theme.PrimaryOrange
-data class Conversation(
-    val title: String,
-    val message: String,
-    val time: String,
-    val hasUnread: Boolean = false
-)
+import com.example.roomtracker.viewmodel.ChatViewModel
+import com.example.roomtracker.model.ConversacionServicio
+
 @Composable
 fun MessagesScreen(
     navController: NavController,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    chatViewModel: ChatViewModel
 ) {
+    val conversaciones by chatViewModel.conversaciones.collectAsStateWithLifecycle()
+    val isLoading by chatViewModel.isLoading.collectAsStateWithLifecycle()
+
     var search by remember { mutableStateOf("") }
-    val conversations = listOf(
-        Conversation(
-            "Soporte Técnico Campus",
-            "Su reporte ha sido recibido.",
-            "10:45 AM",
-            true
-        ),
-        Conversation(
-            "Servicios Alimenticios",
-            "El menú del día está disponible.",
-            "09:20 AM"
-        ),
-        Conversation(
-            "Biblioteca Central",
-            "Su reserva vence en 2 horas.",
-            "Ayer"
-        )
-    )
+
+    val filtradas = if (search.isBlank()) conversaciones
+    else conversaciones.filter {
+        it.operador.nombreCompleto.contains(search, ignoreCase = true)
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundGray)
+            .statusBarsPadding()
             .padding(horizontal = 20.dp)
     ) {
-
-        Spacer(modifier = Modifier.height(40.dp))
-
-        // HEADER
         ScreenHeader(
-            title = "Mensajes",
-            onBack = onBack,
-            action = {
-                FloatingActionButton(
-                    onClick = {
-                        navController.navigate(
-                            AppScreens.Chat.name + "/Nuevo Chat"
-                        )
-                    },
-                    containerColor = PrimaryOrange,
-                    modifier = Modifier.size(48.dp)
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = null)
-                }
-            }
+            title  = "Mensajes",
+            onBack = onBack
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // SEARCH
         SearchField(
             value = search,
             onValueChange = { search = it },
@@ -96,19 +65,22 @@ fun MessagesScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // LISTA
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(conversations) { conversation ->
-                ConversationItem(
-                    conversation = conversation,
-                    onClick = {
-                        navController.navigate(
-                            AppScreens.Chat.name + "/${conversation.title}"
-                        )
-                    }
-                )
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = PrimaryOrange)
+            }
+        } else {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                items(filtradas, key = { it.operador.idUsuario }) { conversacion ->
+                    ConversationItem(
+                        conversacion = conversacion,
+                        onClick = {
+                            navController.navigate(
+                                AppScreens.Chat.name + "/${conversacion.operador.idUsuario}/${conversacion.operador.nombreCompleto}"
+                            )
+                        }
+                    )
+                }
             }
         }
     }
@@ -116,9 +88,9 @@ fun MessagesScreen(
 
 @Composable
 fun ConversationItem(
-    conversation: Conversation,
+    conversacion: ConversacionServicio,
     onClick: () -> Unit
-){
+) {
     Card(
         onClick = onClick,
         shape = RoundedCornerShape(20.dp),
@@ -135,13 +107,14 @@ fun ConversationItem(
                 modifier = Modifier
                     .size(48.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .background(PrimaryOrange.copy(alpha = 0.15f)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Default.ChatBubbleOutline,
-                    contentDescription = null,
-                    tint = LightText
+                Text(
+                    conversacion.operador.nombre.first().uppercaseChar().toString(),
+                    fontWeight = FontWeight.Bold,
+                    color = PrimaryOrange,
+                    fontSize = 18.sp
                 )
             }
 
@@ -149,33 +122,33 @@ fun ConversationItem(
 
             Column(modifier = Modifier.weight(1f)) {
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = conversation.title,
+                        text = conversacion.operador.nombreCompleto,
                         fontWeight = FontWeight.SemiBold,
                         color = DarkText,
                         modifier = Modifier.weight(1f)
                     )
-
-                    Text(
-                        text = conversation.time,
-                        fontSize = 12.sp,
-                        color = LightText
-                    )
+                    if (conversacion.lastTime.isNotEmpty()) {
+                        Text(
+                            text = conversacion.lastTime,
+                            fontSize = 12.sp,
+                            color = LightText
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = conversation.message,
+                    text = conversacion.lastMessage,
                     color = LightText,
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    maxLines = 1
                 )
             }
 
-            if (conversation.hasUnread) {
+            if (conversacion.unread) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Box(
                     modifier = Modifier

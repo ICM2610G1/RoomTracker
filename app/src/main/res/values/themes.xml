@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Tema principal de la app -->
     <style name="Theme.RoomTracker" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- Tema de Splash Screen -->
+    <style name="Theme.RoomTracker.Splash" parent="Theme.SplashScreen">
+        <!-- Icono central del splash (tu logo) -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <!-- Color de fondo del splash -->
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <!-- Tema al que transiciona cuando termina el splash -->
+        <item name="postSplashScreenTheme">@style/Theme.RoomTracker</item>
+    </style>
+
 </resources>
